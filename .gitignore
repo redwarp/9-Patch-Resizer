@@ -1,0 +1,9 @@
+/.settings
+/bin
+/docs
+/libs
+/obfuscate
+/problem
+/proguard
+/.checkstyle
+/Resizer*.jar

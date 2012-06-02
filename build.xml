@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="Resizer">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../../dev/eclipse"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+	<property file="res/misc/preferences.properties"/>
+    <path id="Resizer.classpath">
+        <pathelement location="bin"/>
+    </path>
+	<taskdef resource="proguard/ant/task.properties"
+		         classpath="proguard/lib/proguard.jar" />
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="res">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project,tojar,proguard,move" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}" includeantruntime="false">
+            <src path="src"/>
+            <classpath refid="Resizer.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}" includeantruntime="false">
+            <src path="res"/>
+            <classpath refid="Resizer.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="main">
+        <java classname="net.redwarp.tool.resizer.Main" failonerror="true" fork="yes">
+            <classpath refid="Resizer.classpath"/>
+        </java>
+    </target>
+	<target name="tojar">
+		<echo message="Creating jar"></echo>
+		<jar basedir="bin" destfile="Resizer_raw.jar">
+			<manifest>
+				<attribute name="Main-Class" value="net.redwarp.tool.resizer.Main"/>
+				<attribute name="Manifest-Version" value="${version}"/>
+				<attribute name="Created-By" value="Redwarp"/>
+			</manifest>
+		</jar>
+	</target>
+	<target name="proguard" description="description">
+		<echo message="Proguard"/>
+		<proguard configuration="proguard.txt"/>
+	</target>
+	<target name="move">
+		<echo message="Renaming jar"/>
+		<copy file="Resizer_proguard.jar" tofile="Resizer_${version}.jar"/>
+	</target>
+</project>
