@@ -48,6 +48,9 @@ import java.io.Reader;
  * <p>
  * 2007-09-12 Nathan Blomquist -- Linux (KDE/Gnome) support added.
  * </p>
+ * <p>
+ * 2012-05-10 Redwarp -- Parameterized (me gusta)
+ * </p>
  * 
  * @author Robert Harder
  * @author rharder@users.sf.net

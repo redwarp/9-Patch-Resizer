@@ -23,13 +23,20 @@ import java.util.ResourceBundle;
 
 public class Localization {
 	private static ResourceBundle bundle = ResourceBundle.getBundle(
-			"locale.Strings", Locale.FRANCE);
+			"locale.Strings", Locale.getDefault(), new MyResourceControl());
 
 	public static String get(String key) {
 		try {
 			return bundle.getString(key);
 		} catch (MissingResourceException e) {
 			return new String(key);
+		}
+	}
+
+	private static class MyResourceControl extends ResourceBundle.Control {
+		@Override
+		public Locale getFallbackLocale(String baseName, Locale locale) {
+			return null;
 		}
 	}
 }
