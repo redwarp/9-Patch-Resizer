@@ -7,3 +7,6 @@
 /proguard
 /.checkstyle
 /Resizer*.jar
+/Resizer*.exe
+/antbin
+/launch4j.log
