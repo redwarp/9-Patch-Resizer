@@ -39,7 +39,9 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 	private Operation operation;
 	private ScreenDensity inputDensity;
 	private static ExecutorService executor = Executors
-			.newSingleThreadExecutor();
+			.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+	private static Object fileLock = new Object();
+	private static Object folderLock = new Object();
 
 	public ImageScaler(final Operation operation,
 			final ScreenDensity inputDensity) {
@@ -51,7 +53,10 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 	@Override
 	protected Void doInBackground() throws Exception {
 		try {
-			BufferedImage inputImage = ImageIO.read(this.inputFile);
+			BufferedImage inputImage;
+			synchronized (fileLock) {
+				inputImage = ImageIO.read(this.inputFile);
+			}
 			this.operation.setStatus(OperationStatus.IN_PROGRESS);
 			this.publish(this.operation);
 
@@ -60,10 +65,14 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 
 			File parent = this.inputFile.getParentFile();
 			for (ScreenDensity density : densityList) {
-				File outputFolder = new File(parent, "drawable-"
-						+ density.getName());
-				if (!outputFolder.exists()) {
-					outputFolder.mkdir();
+				File outputFolder;
+
+				synchronized (folderLock) {
+					outputFolder = new File(parent, "drawable-"
+							+ density.getName());
+					if (!outputFolder.exists()) {
+						outputFolder.mkdir();
+					}
 				}
 
 				File outputFile = new File(outputFolder,
@@ -111,7 +120,9 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 					}
 
 					try {
-						ImageIO.write(outputImage, "png", outputFile);
+						synchronized (fileLock) {
+							ImageIO.write(outputImage, "png", outputFile);
+						}
 					} catch (IOException e) {
 						this.operation.setStatus(OperationStatus.ERROR);
 						this.publish(this.operation);
