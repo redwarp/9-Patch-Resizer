@@ -46,18 +46,26 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
 		label.setIcon(null);
 		label.setText(null);
 
-		if (value instanceof OperationStatus) {
-			OperationStatus status = (OperationStatus) value;
-			if (status == OperationStatus.PENDING) {
-				label.setText(Localization.get("status_pending"));
-			} else if (status == OperationStatus.FINISH) {
+		if (value instanceof Operation) {
+			Operation operation = (Operation) value;
+			OperationStatus status = operation.getStatus();
+			if (status == OperationStatus.FINISH) {
 				label.setIcon(this.iconSuccess);
-				label.setText(Localization.get("status_finished"));
 			} else if (status == OperationStatus.ERROR) {
 				label.setIcon(this.iconError);
-				label.setText(Localization.get("status_error"));
-			} else if (status == OperationStatus.IN_PROGRESS) {
-				label.setText(Localization.get("status_in_progress"));
+			}
+			if (operation.getMessage() != null) {
+				label.setText(operation.getMessage());
+			} else {
+				if (status == OperationStatus.PENDING) {
+					label.setText(Localization.get("status_pending"));
+				} else if (status == OperationStatus.FINISH) {
+					label.setText(Localization.get("status_finished"));
+				} else if (status == OperationStatus.ERROR) {
+					label.setText(Localization.get("status_error"));
+				} else if (status == OperationStatus.IN_PROGRESS) {
+					label.setText(Localization.get("status_in_progress"));
+				}
 			}
 		}
 

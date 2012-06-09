@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package net.redwarp.tool.resizer;
+package net.redwarp.tool.resizer.worker;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -31,6 +31,8 @@ import java.util.concurrent.Executors;
 import javax.imageio.ImageIO;
 import javax.swing.SwingWorker;
 
+import net.redwarp.tool.resizer.FileTools;
+import net.redwarp.tool.resizer.misc.Localization;
 import net.redwarp.tool.resizer.table.Operation;
 import net.redwarp.tool.resizer.table.OperationStatus;
 
@@ -54,9 +56,19 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 	protected Void doInBackground() throws Exception {
 		try {
 			BufferedImage inputImage;
+			long time = System.currentTimeMillis();
 			synchronized (fileLock) {
 				inputImage = ImageIO.read(this.inputFile);
 			}
+			System.out.println("Opening : "
+					+ (System.currentTimeMillis() - time));
+			if (inputImage == null) {
+				this.operation.setStatus(OperationStatus.ERROR,
+						Localization.get("error_wrong_png"));
+				this.publish(this.operation);
+				return null;
+			}
+
 			this.operation.setStatus(OperationStatus.IN_PROGRESS);
 			this.publish(this.operation);
 
@@ -82,9 +94,10 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 				}
 
 				if (density.equals(this.inputDensity)) {
-
 					FileTools.copyfile(this.inputFile, outputFile);
 				} else {
+					time = System.currentTimeMillis();
+
 					BufferedImage outputImage;
 					if (this.inputFile.getName().endsWith(".9.png")) {
 						BufferedImage trimedImage = this
@@ -101,8 +114,15 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 						int w = trimedImage.getWidth();
 						int h = trimedImage.getHeight();
 
-						borderImage = this.generateBordersImage(inputImage, w,
-								h);
+						try {
+							borderImage = this.generateBordersImage(inputImage,
+									w, h);
+						} catch (Wrong9PatchException e) {
+							this.operation.setStatus(OperationStatus.ERROR,
+									Localization.get("error_wrong_9p"));
+							this.publish(this.operation);
+							return null;
+						}
 
 						int[] rgbArray = new int[w * h];
 						trimedImage.getRGB(0, 0, w, h, rgbArray, 0, w);
@@ -119,10 +139,18 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 								(int) (ratio * inputImage.getHeight()));
 					}
 
+					System.out.println("Scaling " + density.getName() + " : "
+							+ (System.currentTimeMillis() - time));
+
 					try {
+						time = System.currentTimeMillis();
+
 						synchronized (fileLock) {
 							ImageIO.write(outputImage, "png", outputFile);
 						}
+
+						System.out.println("Writing : "
+								+ (System.currentTimeMillis() - time));
 					} catch (IOException e) {
 						this.operation.setStatus(OperationStatus.ERROR);
 						this.publish(this.operation);
@@ -217,7 +245,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 	}
 
 	private BufferedImage generateBordersImage(BufferedImage source,
-			int trimedWidth, int trimedHeight) {
+			int trimedWidth, int trimedHeight) throws Wrong9PatchException {
 		BufferedImage finalBorder = new BufferedImage(trimedWidth + 2,
 				trimedHeight + 2, BufferedImage.TYPE_INT_ARGB);
 		int cutW = source.getWidth() - 2;
@@ -228,10 +256,8 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 					BufferedImage.TYPE_INT_ARGB);
 			leftBorder.setRGB(0, 0, 1, cutH,
 					source.getRGB(0, 1, 1, cutH, null, 0, 1), 0, 1);
-			// leftBorder = this.getDownScaledImage(leftBorder, 1, trimedHeight,
-			// true);
-			// this.enforceBorderColors(leftBorder);
 			leftBorder = this.resizeBorder(leftBorder, 1, trimedHeight);
+			this.verifyBorderImage(leftBorder);
 			finalBorder.setRGB(0, 1, 1, trimedHeight,
 					leftBorder.getRGB(0, 0, 1, trimedHeight, null, 0, 1), 0, 1);
 		}
@@ -241,10 +267,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 					BufferedImage.TYPE_INT_ARGB);
 			rightBorder.setRGB(0, 0, 1, cutH,
 					source.getRGB(cutW + 1, 1, 1, cutH, null, 0, 1), 0, 1);
-			// rightBorder = this.getDownScaledImage(rightBorder, 1,
-			// trimedHeight,
-			// true);
-			// this.enforceBorderColors(rightBorder);
+			this.verifyBorderImage(rightBorder);
 			rightBorder = this.resizeBorder(rightBorder, 1, trimedHeight);
 			finalBorder
 					.setRGB(trimedWidth + 1, 0, 1, trimedHeight, rightBorder
@@ -256,9 +279,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 					BufferedImage.TYPE_INT_ARGB);
 			topBorder.setRGB(0, 0, cutW, 1,
 					source.getRGB(1, 0, cutW, 1, null, 0, cutW), 0, cutW);
-			// topBorder = this
-			// .getDownScaledImage(topBorder, trimedWidth, 1, true);
-			// this.enforceBorderColors(topBorder);
+			this.verifyBorderImage(topBorder);
 			topBorder = this.resizeBorder(topBorder, trimedWidth, 1);
 			finalBorder.setRGB(1, 0, trimedWidth, 1, topBorder.getRGB(0, 0,
 					trimedWidth, 1, null, 0, trimedWidth), 0, trimedWidth);
@@ -271,9 +292,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 					.setRGB(0, 0, cutW, 1,
 							source.getRGB(1, cutH + 1, cutW, 1, null, 0, cutW),
 							0, cutW);
-			// bottomBorder = this.getDownScaledImage(bottomBorder, trimedWidth,
-			// 1, true);
-			// this.enforceBorderColors(bottomBorder);
+			this.verifyBorderImage(bottomBorder);
 			bottomBorder = this.resizeBorder(bottomBorder, trimedWidth, 1);
 			finalBorder.setRGB(1, trimedHeight + 1, trimedWidth, 1,
 					bottomBorder.getRGB(0, 0, trimedWidth, 1, null, 0,
@@ -319,5 +338,18 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 		img.setRGB(0, 0, targetWidth, targetHeight, newData, 0, targetWidth);
 
 		return img;
+	}
+
+	private void verifyBorderImage(BufferedImage border)
+			throws Wrong9PatchException {
+		int[] rgb = border.getRGB(0, 0, border.getWidth(), border.getHeight(),
+				null, 0, border.getWidth());
+		for (int i = 0; i < rgb.length; i++) {
+			if ((0xff000000 & rgb[i]) != 0) {
+				if (rgb[i] != 0xff000000) {
+					throw new Wrong9PatchException();
+				}
+			}
+		}
 	}
 }

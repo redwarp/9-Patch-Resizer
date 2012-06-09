@@ -44,11 +44,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import net.iharder.dnd.FileDrop;
-import net.redwarp.tool.resizer.ImageScaler;
-import net.redwarp.tool.resizer.ScreenDensity;
 import net.redwarp.tool.resizer.misc.Localization;
 import net.redwarp.tool.resizer.table.Operation;
 import net.redwarp.tool.resizer.table.ResultTable;
+import net.redwarp.tool.resizer.worker.ImageScaler;
+import net.redwarp.tool.resizer.worker.ScreenDensity;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {

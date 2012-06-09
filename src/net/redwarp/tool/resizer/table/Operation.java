@@ -20,6 +20,7 @@ import java.io.File;
 public class Operation {
 	private volatile OperationStatus status;
 	private File file;
+	private String message = null;
 
 	public Operation(File f) {
 		this.file = f;
@@ -36,5 +37,15 @@ public class Operation {
 
 	public void setStatus(OperationStatus status) {
 		this.status = status;
+		this.message = null;
+	}
+
+	public void setStatus(OperationStatus status, String message) {
+		this.status = status;
+		this.message = message;
+	}
+
+	public String getMessage() {
+		return this.message;
 	}
 }

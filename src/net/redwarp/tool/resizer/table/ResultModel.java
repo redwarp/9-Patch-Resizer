@@ -49,7 +49,7 @@ public class ResultModel extends AbstractTableModel {
 		case 0:
 			return this.operationList.get(rowIndex).getFile().getName();
 		case 1:
-			return this.operationList.get(rowIndex).getStatus();
+			return this.operationList.get(rowIndex);
 		default:
 			return "";
 		}
