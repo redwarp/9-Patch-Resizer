@@ -1,8 +1,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\Akaiwarp\workspace\Resizer\Resizer_1.0.1.jar</jar>
-  <outfile>C:\Users\Akaiwarp\workspace\Resizer\Resizer_1.0.1.exe</outfile>
+  <jar>C:\Users\Akaiwarp\workspace\Resizer\Resizer_1.1.jar</jar>
+  <outfile>C:\Users\Akaiwarp\workspace\Resizer\Resizer_1.1.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>

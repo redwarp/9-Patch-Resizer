@@ -56,12 +56,9 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 	protected Void doInBackground() throws Exception {
 		try {
 			BufferedImage inputImage;
-			long time = System.currentTimeMillis();
 			synchronized (fileLock) {
 				inputImage = ImageIO.read(this.inputFile);
 			}
-			System.out.println("Opening : "
-					+ (System.currentTimeMillis() - time));
 			if (inputImage == null) {
 				this.operation.setStatus(OperationStatus.ERROR,
 						Localization.get("error_wrong_png"));
@@ -96,7 +93,6 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 				if (density.equals(this.inputDensity)) {
 					FileTools.copyfile(this.inputFile, outputFile);
 				} else {
-					time = System.currentTimeMillis();
 
 					BufferedImage outputImage;
 					if (this.inputFile.getName().endsWith(".9.png")) {
@@ -139,18 +135,12 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 								(int) (ratio * inputImage.getHeight()));
 					}
 
-					System.out.println("Scaling " + density.getName() + " : "
-							+ (System.currentTimeMillis() - time));
-
 					try {
-						time = System.currentTimeMillis();
 
 						synchronized (fileLock) {
 							ImageIO.write(outputImage, "png", outputFile);
 						}
 
-						System.out.println("Writing : "
-								+ (System.currentTimeMillis() - time));
 					} catch (IOException e) {
 						this.operation.setStatus(OperationStatus.ERROR);
 						this.publish(this.operation);
