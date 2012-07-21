@@ -1,8 +1,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\Akaiwarp\workspace\Resizer\Resizer_1.1.jar</jar>
-  <outfile>C:\Users\Akaiwarp\workspace\Resizer\Resizer_1.1.exe</outfile>
+  <jar>C:\Users\Akaiwarp\workspace\Resizer\Resizer_1.1.1.jar</jar>
+  <outfile>C:\Users\Akaiwarp\workspace\Resizer\Resizer_1.1.1.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
@@ -24,12 +24,12 @@
     <jdkPreference>preferJre</jdkPreference>
   </jre>
   <versionInfo>
-    <fileVersion>1.0.0.0</fileVersion>
-    <txtFileVersion>1.0</txtFileVersion>
+    <fileVersion>1.1.1.0</fileVersion>
+    <txtFileVersion>1.1.1</txtFileVersion>
     <fileDescription>9Patch Resizer</fileDescription>
     <copyright>Redwarp - 2012</copyright>
-    <productVersion>1.0.0.0</productVersion>
-    <txtProductVersion>1.0</txtProductVersion>
+    <productVersion>1.1.1.0</productVersion>
+    <txtProductVersion>1.1.1</txtProductVersion>
     <productName>9Patch Resizer</productName>
     <companyName></companyName>
     <internalName>Resizer</internalName>

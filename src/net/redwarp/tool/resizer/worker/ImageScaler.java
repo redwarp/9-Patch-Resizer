@@ -260,7 +260,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 			this.verifyBorderImage(rightBorder);
 			rightBorder = this.resizeBorder(rightBorder, 1, trimedHeight);
 			finalBorder
-					.setRGB(trimedWidth + 1, 0, 1, trimedHeight, rightBorder
+					.setRGB(trimedWidth + 1, 1, 1, trimedHeight, rightBorder
 							.getRGB(0, 0, 1, trimedHeight, null, 0, 1), 0, 1);
 		}
 		{
@@ -307,15 +307,17 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 		int[] data = border.getRGB(0, 0, w, h, null, 0, w);
 		int[] newData = new int[targetWidth * targetHeight];
 
-		float widthRatio = (float) targetWidth / (float) w;
-		float heightRatio = (float) targetHeight / (float) h;
+		float widthRatio = (float) Math.max(targetWidth - 1, 1)
+				/ (float) Math.max(w - 1, 1);
+		float heightRatio = (float) Math.max(targetHeight - 1, 1)
+				/ (float) Math.max(h - 1, 1);
 
 		for (int y = 0; y < h; y++) {
 			for (int x = 0; x < w; x++) {
 				if ((0xff000000 & data[y * w + x]) != 0) {
-					int newX = Math
-							.min((int) (x * widthRatio), targetWidth - 1);
-					int newY = Math.min((int) (y * heightRatio),
+					int newX = Math.min(Math.round(x * widthRatio),
+							targetWidth - 1);
+					int newY = Math.min(Math.round(y * heightRatio),
 							targetHeight - 1);
 
 					newData[newY * targetWidth + newX] = 0xff000000;
