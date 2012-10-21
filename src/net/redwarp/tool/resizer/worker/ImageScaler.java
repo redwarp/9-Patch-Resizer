@@ -31,7 +31,6 @@ import java.util.concurrent.Executors;
 import javax.imageio.ImageIO;
 import javax.swing.SwingWorker;
 
-import net.redwarp.tool.resizer.FileTools;
 import net.redwarp.tool.resizer.misc.Localization;
 import net.redwarp.tool.resizer.table.Operation;
 import net.redwarp.tool.resizer.table.OperationStatus;
@@ -84,70 +83,77 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 					}
 				}
 
-				File outputFile = new File(outputFolder,
-						this.inputFile.getName());
+				String name;
+				int extensionPos = this.inputFile.getName().lastIndexOf('.');
+				if (extensionPos != -1) {
+					name = this.inputFile.getName().substring(0, extensionPos)
+							+ ".png";
+				} else {
+					name = this.inputFile.getName();
+				}
+
+				File outputFile = new File(outputFolder, name);
 				if (outputFile.exists()) {
 					outputFile.delete();
 				}
 
-				if (density.equals(this.inputDensity)) {
-					FileTools.copyfile(this.inputFile, outputFile);
-				} else {
+				// if (density.equals(this.inputDensity)) {
+				// FileTools.copyfile(this.inputFile, outputFile);
+				// } else {
 
-					BufferedImage outputImage;
-					if (this.inputFile.getName().endsWith(".9.png")) {
-						BufferedImage trimedImage = this
-								.trim9PBorder(inputImage);
+				BufferedImage outputImage;
+				if (this.inputFile.getName().endsWith(".9.png")) {
+					BufferedImage trimedImage = this.trim9PBorder(inputImage);
 
-						float ratio = density.getDensity()
-								/ this.inputDensity.getDensity();
-						trimedImage = this.rescaleImage(trimedImage,
-								(int) (ratio * trimedImage.getWidth()),
-								(int) (ratio * trimedImage.getHeight()));
+					float ratio = density.getDensity()
+							/ this.inputDensity.getDensity();
+					trimedImage = this.rescaleImage(trimedImage,
+							(int) (ratio * trimedImage.getWidth()),
+							(int) (ratio * trimedImage.getHeight()));
 
-						BufferedImage borderImage;
+					BufferedImage borderImage;
 
-						int w = trimedImage.getWidth();
-						int h = trimedImage.getHeight();
-
-						try {
-							borderImage = this.generateBordersImage(inputImage,
-									w, h);
-						} catch (Wrong9PatchException e) {
-							this.operation.setStatus(OperationStatus.ERROR,
-									Localization.get("error_wrong_9p"));
-							this.publish(this.operation);
-							return null;
-						}
-
-						int[] rgbArray = new int[w * h];
-						trimedImage.getRGB(0, 0, w, h, rgbArray, 0, w);
-						borderImage.setRGB(1, 1, w, h, rgbArray, 0, w);
-						rgbArray = null;
-
-						outputImage = borderImage;
-					} else {
-
-						float ratio = density.getDensity()
-								/ this.inputDensity.getDensity();
-						outputImage = this.rescaleImage(inputImage,
-								(int) (ratio * inputImage.getWidth()),
-								(int) (ratio * inputImage.getHeight()));
-					}
+					int w = trimedImage.getWidth();
+					int h = trimedImage.getHeight();
 
 					try {
-
-						synchronized (fileLock) {
-							ImageIO.write(outputImage, "png", outputFile);
-						}
-
-					} catch (IOException e) {
-						this.operation.setStatus(OperationStatus.ERROR);
+						borderImage = this.generateBordersImage(inputImage, w,
+								h);
+					} catch (Wrong9PatchException e) {
+						this.operation.setStatus(OperationStatus.ERROR,
+								Localization.get("error_wrong_9p"));
 						this.publish(this.operation);
 						return null;
 					}
+
+					int[] rgbArray = new int[w * h];
+					trimedImage.getRGB(0, 0, w, h, rgbArray, 0, w);
+					borderImage.setRGB(1, 1, w, h, rgbArray, 0, w);
+					rgbArray = null;
+
+					outputImage = borderImage;
+				} else {
+
+					float ratio = density.getDensity()
+							/ this.inputDensity.getDensity();
+					outputImage = this.rescaleImage(inputImage,
+							(int) (ratio * inputImage.getWidth()),
+							(int) (ratio * inputImage.getHeight()));
+				}
+
+				try {
+
+					synchronized (fileLock) {
+						ImageIO.write(outputImage, "png", outputFile);
+					}
+
+				} catch (IOException e) {
+					this.operation.setStatus(OperationStatus.ERROR);
+					this.publish(this.operation);
+					return null;
 				}
 			}
+			// }
 			this.operation.setStatus(OperationStatus.FINISH);
 			this.publish(this.operation);
 		} catch (IOException e) {

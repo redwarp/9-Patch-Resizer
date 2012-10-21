@@ -143,7 +143,8 @@ public class MainWindow extends JFrame {
 			@Override
 			public void filesDropped(Container source, File[] files) {
 				for (File input : files) {
-					if (input.getName().endsWith(".png")) {
+					String name = input.getName().toLowerCase();
+					if (name.endsWith(".png") || name.endsWith(".jpg")) {
 						MainWindow.this.mntmClear.setEnabled(true);
 						CardLayout layout = (CardLayout) MainWindow.this
 								.getContentPane().getLayout();
