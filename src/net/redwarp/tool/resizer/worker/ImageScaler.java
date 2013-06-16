@@ -252,8 +252,8 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 					BufferedImage.TYPE_INT_ARGB);
 			leftBorder.setRGB(0, 0, 1, cutH,
 					source.getRGB(0, 1, 1, cutH, null, 0, 1), 0, 1);
-			leftBorder = this.resizeBorder(leftBorder, 1, trimedHeight);
 			this.verifyBorderImage(leftBorder);
+			leftBorder = this.resizeBorder(leftBorder, 1, trimedHeight);
 			finalBorder.setRGB(0, 1, 1, trimedHeight,
 					leftBorder.getRGB(0, 0, 1, trimedHeight, null, 0, 1), 0, 1);
 		}
@@ -326,7 +326,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 					int newY = Math.min(Math.round(y * heightRatio),
 							targetHeight - 1);
 
-					newData[newY * targetWidth + newX] = 0xff000000;
+					newData[newY * targetWidth + newX] = data[y * w + x];
 				}
 			}
 		}
@@ -344,7 +344,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 				null, 0, border.getWidth());
 		for (int i = 0; i < rgb.length; i++) {
 			if ((0xff000000 & rgb[i]) != 0) {
-				if (rgb[i] != 0xff000000) {
+				if (rgb[i] != 0xff000000 && rgb[i] != 0xffff0000) {
 					throw new Wrong9PatchException();
 				}
 			}
