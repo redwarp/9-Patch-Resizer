@@ -343,9 +343,6 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 		int[] rgb = border.getRGB(0, 0, border.getWidth(), border.getHeight(),
 				null, 0, border.getWidth());
 		for (int i = 0; i < rgb.length; i++) {
-			if (border.getWidth() == 1) {
-				System.out.println(String.format("%08X", rgb[i]));
-			}
 			if ((0xff000000 & rgb[i]) != 0) {
 				if (rgb[i] != 0xff000000 && rgb[i] != 0xffff0000) {
 					throw new Wrong9PatchException();
