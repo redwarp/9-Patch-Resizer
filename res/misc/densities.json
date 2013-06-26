@@ -1,0 +1,30 @@
+{
+    "densities": [
+        {
+            "name": "xhdpi",
+            "scale": 2,
+            "active": true
+        },
+        {
+            "name": "hdpi",
+            "scale": 1.5,
+            "active": true
+        },
+        {
+            "name": "tvdpi",
+            "scale": 1.33,
+            "active": true
+        },
+        {
+            "name": "mdpi",
+            "scale": 1,
+            "active": true
+        },
+        {
+            "name": "ldpi",
+            "scale": 0.75,
+            "active": true
+        }
+    ],
+    "source": "xhdpi"
+}
