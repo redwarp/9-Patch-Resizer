@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
@@ -102,10 +103,48 @@ public class MainWindow extends JFrame {
         this.xhdpiButton.setContentAreaFilled(false);
         this.inputPanel.add(this.xhdpiButton, BorderLayout.CENTER);
 
-        for (int i = 0; i < 5; i++) {
-            JCheckBox box = new JCheckBox("Lapin");
-            this.inputPanel.add(box, BorderLayout.LINE_START);
+        JPanel optionPanel = new JPanel();
+        optionPanel.setLayout(new BoxLayout(optionPanel, BoxLayout.PAGE_AXIS));
+        optionPanel.add(Box.createVerticalGlue());
+
+        JLabel inputLabel = new JLabel("Input density:");
+        inputLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        optionPanel.add(inputLabel);
+        JComboBox inputDensityChoice = new JComboBox(new Vector<ScreenDensity>(ScreenDensity.getSupportedScreenDensity()));
+        inputDensityChoice.setSelectedItem(ScreenDensity.getDefaultInputDensity());
+        inputDensityChoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JComboBox box = (JComboBox) actionEvent.getSource();
+                ScreenDensity selectedDensity = (ScreenDensity) box.getSelectedItem();
+                ScreenDensity.setDefaultInputDensity(selectedDensity);
+            }
+        });
+        inputDensityChoice.setAlignmentX(Component.LEFT_ALIGNMENT);
+        inputDensityChoice.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+        inputDensityChoice.setPreferredSize(new Dimension(1, 10));
+
+        optionPanel.add(inputDensityChoice);
+        optionPanel.add(Box.createVerticalGlue());
+
+        JLabel outputLabel = new JLabel("Output densities:");
+        optionPanel.add(outputLabel);
+        for (final ScreenDensity density : ScreenDensity.getSupportedScreenDensity()) {
+            final JCheckBox box = new JCheckBox(density.getName());
+            box.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    density.setActive(box.isSelected());
+                }
+            });
+            box.setSelected(density.isActive());
+            box.setAlignmentX(Component.LEFT_ALIGNMENT);
+            optionPanel.add(box);
         }
+        optionPanel.add(Box.createVerticalGlue());
+        optionPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Options"), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+
+        this.inputPanel.add(optionPanel, BorderLayout.LINE_START);
 
         this.outputPanel = new JPanel();
         this.getContentPane().add(this.outputPanel, "output");
@@ -147,8 +186,6 @@ public class MainWindow extends JFrame {
                                             .notifyChange(operation);
                                 }
                             }
-
-                            ;
                         };
                         scaler.post();
                     }

@@ -31,6 +31,8 @@ import java.util.List;
 public class ScreenDensity {
     private float scale;
     private String name;
+
+
     private boolean active;
 
     private static List<ScreenDensity> list = null;
@@ -66,11 +68,6 @@ public class ScreenDensity {
         }
     }
 
-    public static final int LDPI = 0;
-    public static final int MDPI = 1;
-    public static final int HDPI = 2;
-    public static final int XHDPI = 3;
-
     private ScreenDensity(String name, float density, boolean active) {
         this.scale = density;
         this.name = name;
@@ -79,7 +76,7 @@ public class ScreenDensity {
 
     @Override
     public String toString() {
-        return this.name + String.format(" (%.2f", this.scale) + " - active = " + active + ")";
+        return this.name;
     }
 
     public String getName() {
@@ -90,30 +87,16 @@ public class ScreenDensity {
         return this.scale;
     }
 
-
-    public static ScreenDensity getDensity(int density)
-            throws UnsupportedDensityException {
-        if (density == LDPI) {
-            return new ScreenDensity("ldpi", 0.75f, true);
-        }
-        if (density == MDPI) {
-            return new ScreenDensity("mdpi", 1f, true);
-        }
-        if (density == HDPI) {
-            return new ScreenDensity("hdpi", 1.5f, true);
-        }
-        if (density == XHDPI) {
-            return new ScreenDensity("xhdpi", 2f, true);
-        }
-        throw new UnsupportedDensityException();
-    }
-
     public static List<ScreenDensity> getSupportedScreenDensity() {
         return list;
     }
 
     public static ScreenDensity getDefaultInputDensity() {
         return defaultInputDensity;
+    }
+
+    public static void setDefaultInputDensity(ScreenDensity density) {
+        defaultInputDensity = density;
     }
 
     @Override
@@ -126,5 +109,9 @@ public class ScreenDensity {
 
     public boolean isActive() {
         return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
