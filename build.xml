@@ -10,7 +10,6 @@
     <path id="Resizer.classpath">
         <pathelement location="${bin}"/>
         <pathelement location="libs/gson-2.2.4.jar"/>
-        <pathelement location="libs/guava-14.0.1.jar"></pathelement>
     </path>
 	<taskdef resource="proguard/ant/task.properties"
 		         classpath="proguard/lib/proguard.jar" />

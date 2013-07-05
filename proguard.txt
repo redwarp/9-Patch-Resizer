@@ -1,5 +1,4 @@
 -injars       Resizer_raw.jar
-#-injars libs/gson-2.2.4.jar
 -outjars      Resizer_proguard.jar
 -libraryjars  <java.home>/lib/rt.jar
 -printmapping obfuscate/myapplication.map
