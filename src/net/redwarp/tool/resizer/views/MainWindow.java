@@ -107,7 +107,7 @@ public class MainWindow extends JFrame {
         optionPanel.setLayout(new BoxLayout(optionPanel, BoxLayout.PAGE_AXIS));
         optionPanel.add(Box.createVerticalGlue());
 
-        JLabel inputLabel = new JLabel("Input density:");
+        JLabel inputLabel = new JLabel(Localization.get("input_density"));
         inputLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         optionPanel.add(inputLabel);
         JComboBox inputDensityChoice = new JComboBox(new Vector<ScreenDensity>(ScreenDensity.getSupportedScreenDensity()));
@@ -127,7 +127,7 @@ public class MainWindow extends JFrame {
         optionPanel.add(inputDensityChoice);
         optionPanel.add(Box.createVerticalGlue());
 
-        JLabel outputLabel = new JLabel("Output densities:");
+        JLabel outputLabel = new JLabel(Localization.get("output_density"));
         optionPanel.add(outputLabel);
         for (final ScreenDensity density : ScreenDensity.getSupportedScreenDensity()) {
             final JCheckBox box = new JCheckBox(density.getName());
