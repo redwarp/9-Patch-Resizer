@@ -1,5 +1,10 @@
 {
     "densities": [
+    {
+                "name": "xxhdpi",
+                "scale": 3,
+                "active": false
+            },
         {
             "name": "xhdpi",
             "scale": 2,

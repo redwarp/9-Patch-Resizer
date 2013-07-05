@@ -15,15 +15,13 @@
  */
 package net.redwarp.tool.resizer.worker;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.ByteStreams;
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +38,9 @@ public class ScreenDensity {
 
     static {
         try {
-            byte[] data = ByteStreams.toByteArray(ScreenDensity.class.getClassLoader().getResourceAsStream("misc/densities.json"));
-            String input = new String(data, Charsets.UTF_8);
-
             Gson gson = new Gson();
             JsonParser parser = new JsonParser();
-            JsonObject densitiesObject = parser.parse(input).getAsJsonObject();
+            JsonObject densitiesObject = parser.parse(new InputStreamReader(ScreenDensity.class.getClassLoader().getResourceAsStream("misc/densities.json"))).getAsJsonObject();
             JsonArray densitiesArray = densitiesObject.get("densities").getAsJsonArray();
 
             Type listType = new TypeToken<List<ScreenDensity>>() {
@@ -61,7 +56,7 @@ public class ScreenDensity {
             if (defaultInputDensity == null) {
                 defaultInputDensity = list.get(0);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             list = new ArrayList<ScreenDensity>();
             list.add(new ScreenDensity("xhdpi", 2.0f, true));
             defaultInputDensity = list.get(0);

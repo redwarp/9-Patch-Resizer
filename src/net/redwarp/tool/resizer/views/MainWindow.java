@@ -54,7 +54,7 @@ public class MainWindow extends JFrame {
 
     public MainWindow() {
         this.setSize(new Dimension(450, 350));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle(Localization.get("app_name"));
 
         List<Image> icons = new ArrayList<Image>();
