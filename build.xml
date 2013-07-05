@@ -9,6 +9,7 @@
 	<property name="bin" value="antbin"/>
     <path id="Resizer.classpath">
         <pathelement location="${bin}"/>
+        <pathelement location="libs/gson-2.2.4.jar"/>
     </path>
 	<taskdef resource="proguard/ant/task.properties"
 		         classpath="proguard/lib/proguard.jar" />
@@ -71,6 +72,8 @@
 				<attribute name="Manifest-Version" value="${version}"/>
 				<attribute name="Created-By" value="Redwarp"/>
 			</manifest>
+            <!--<fileset dir="${bin}" includes="**/*.class" />-->
+            <zipgroupfileset dir="libs" includes="gson-2.2.4.jar" />
 		</jar>
 	</target>
 	<target name="proguard" description="description">

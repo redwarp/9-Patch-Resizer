@@ -10,3 +10,5 @@
 /Resizer*.exe
 /antbin
 /launch4j.log
+target
+.idea/workspace.xml

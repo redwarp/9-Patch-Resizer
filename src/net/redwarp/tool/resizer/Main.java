@@ -1,6 +1,4 @@
 /*
- * Copyright 2012 redwarp
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,34 +10,35 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Copyright 2013 Redwarp
  */
 package net.redwarp.tool.resizer;
-
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import net.redwarp.tool.resizer.misc.Localization;
 import net.redwarp.tool.resizer.views.MainWindow;
 
+import javax.swing.*;
+
 public class Main {
-	public static void main(String[] args) {
-		// Apple only stuff
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-				Localization.get("app_name"));
+    public static void main(String[] args) {
+        // Apple only stuff
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+                Localization.get("app_name"));
 
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
 
-		new MainWindow().setVisible(true);
-	}
+        new MainWindow().setVisible(true);
+    }
 }

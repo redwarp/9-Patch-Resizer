@@ -1,6 +1,4 @@
 /*
- * Copyright 2012 redwarp
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,40 +10,42 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Copyright 2013 Redwarp
  */
 package net.redwarp.tool.resizer.table;
 
 import java.io.File;
 
 public class Operation {
-	private volatile OperationStatus status;
-	private File file;
-	private String message = null;
+    private volatile OperationStatus status;
+    private File file;
+    private String message = null;
 
-	public Operation(File f) {
-		this.file = f;
-		this.status = OperationStatus.PENDING;
-	}
+    public Operation(File f) {
+        this.file = f;
+        this.status = OperationStatus.PENDING;
+    }
 
-	public OperationStatus getStatus() {
-		return this.status;
-	}
+    public OperationStatus getStatus() {
+        return this.status;
+    }
 
-	public File getFile() {
-		return this.file;
-	}
+    public File getFile() {
+        return this.file;
+    }
 
-	public void setStatus(OperationStatus status) {
-		this.status = status;
-		this.message = null;
-	}
+    public void setStatus(OperationStatus status) {
+        this.status = status;
+        this.message = null;
+    }
 
-	public void setStatus(OperationStatus status, String message) {
-		this.status = status;
-		this.message = message;
-	}
+    public void setStatus(OperationStatus status, String message) {
+        this.status = status;
+        this.message = message;
+    }
 
-	public String getMessage() {
-		return this.message;
-	}
+    public String getMessage() {
+        return this.message;
+    }
 }
