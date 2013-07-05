@@ -1,6 +1,4 @@
 /*
- * Copyright 2012 redwarp
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,6 +10,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * Copyright 2013 Redwarp
  */
 package net.redwarp.tool.resizer.worker;
 
@@ -21,6 +21,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -40,7 +43,13 @@ public class ScreenDensity {
         try {
             Gson gson = new Gson();
             JsonParser parser = new JsonParser();
-            JsonObject densitiesObject = parser.parse(new InputStreamReader(ScreenDensity.class.getClassLoader().getResourceAsStream("misc/densities.json"))).getAsJsonObject();
+            InputStream preferenceStream;
+            try {
+                preferenceStream = new FileInputStream(new File("./densities.json"));
+            } catch (Exception e) {
+                preferenceStream = ScreenDensity.class.getClassLoader().getResourceAsStream("misc/densities.json");
+            }
+            JsonObject densitiesObject = parser.parse(new InputStreamReader(preferenceStream)).getAsJsonObject();
             JsonArray densitiesArray = densitiesObject.get("densities").getAsJsonArray();
 
             Type listType = new TypeToken<List<ScreenDensity>>() {
