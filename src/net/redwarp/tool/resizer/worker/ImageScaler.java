@@ -23,7 +23,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.RenderingHints.Key;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -54,12 +54,28 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
             BufferedImage inputImage;
             synchronized (fileLock) {
                 inputImage = ImageIO.read(this.inputFile);
+                //Image img = Toolkit.getDefaultToolkit().createImage(url);
+                if (inputImage.getType() != BufferedImage.TYPE_INT_ARGB_PRE && inputImage.getType() != BufferedImage.TYPE_INT_ARGB) {
+                    BufferedImage tempImage = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
+                    tempImage.getGraphics().drawImage(inputImage, 0, 0, null);
+//                    Graphics2D tempGraphics = tempImage.createGraphics();
+//                    tempGraphics.setComposite(AlphaComposite.Clear);
+//                    tempGraphics.fillRect(0, 0, inputImage.getWidth(), inputImage.getHeight());
+//                    tempGraphics.setComposite(AlphaComposite.SrcOver);
+//                    tempGraphics.drawRenderedImage(inputImage, new AffineTransform());
+                    inputImage = tempImage;
+                }
             }
             if (inputImage == null) {
                 this.operation.setStatus(OperationStatus.ERROR,
                         Localization.get("error_wrong_png"));
                 this.publish(this.operation);
                 return null;
+            }
+
+            String type = this.inputFile.getName().substring(this.inputFile.getName().lastIndexOf('.') + 1, this.inputFile.getName().length()).toLowerCase();
+            if (!"jpg".equals(type)) {
+                type = "png";
             }
 
             this.operation.setStatus(OperationStatus.IN_PROGRESS);
@@ -87,7 +103,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
                 int extensionPos = this.inputFile.getName().lastIndexOf('.');
                 if (extensionPos != -1) {
                     name = this.inputFile.getName().substring(0, extensionPos)
-                            + ".png";
+                            + "." + type;
                 } else {
                     name = this.inputFile.getName();
                 }
@@ -96,10 +112,6 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
                 if (outputFile.exists()) {
                     outputFile.delete();
                 }
-
-                // if (density.equals(this.inputDensity)) {
-                // FileTools.copyfile(this.inputFile, outputFile);
-                // } else {
 
                 BufferedImage outputImage;
                 if (this.inputFile.getName().endsWith(".9.png")) {
@@ -144,7 +156,18 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
                 try {
 
                     synchronized (fileLock) {
-                        ImageIO.write(outputImage, "png", outputFile);
+                        if ("jpg".equals(type)) {
+                            PixelGrabber pg = new PixelGrabber(outputImage, 0, 0, -1, -1, true);
+                            pg.grabPixels();
+                            int width = pg.getWidth(), height = pg.getHeight();
+                            final int[] RGB_MASKS = {0xFF0000, 0xFF00, 0xFF};
+                            final ColorModel RGB_OPAQUE =
+                                    new DirectColorModel(32, RGB_MASKS[0], RGB_MASKS[1], RGB_MASKS[2]);
+                            DataBuffer buffer = new DataBufferInt((int[]) pg.getPixels(), pg.getWidth() * pg.getHeight());
+                            WritableRaster raster = Raster.createPackedRaster(buffer, width, height, width, RGB_MASKS, null);
+                            outputImage = new BufferedImage(RGB_OPAQUE, raster, false, null);
+                        }
+                        ImageIO.write(outputImage, type, outputFile);
                     }
 
                 } catch (IOException e) {
@@ -182,7 +205,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
             return this.rescaleImage(tempImage, targetWidth, targetHeight);
         } else {
             BufferedImage outputImage = new BufferedImage(targetWidth,
-                    targetHeight, BufferedImage.TYPE_INT_ARGB);
+                    targetHeight, BufferedImage.TYPE_INT_ARGB_PRE);
             Graphics2D graphics = outputImage.createGraphics();
             Map<Key, Object> hints = new HashMap<RenderingHints.Key, Object>();
             hints.put(RenderingHints.KEY_DITHERING,
@@ -208,7 +231,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
     private BufferedImage trim9PBorder(BufferedImage inputImage) {
         BufferedImage trimedImage = new BufferedImage(
                 inputImage.getWidth() - 2, inputImage.getHeight() - 2,
-                BufferedImage.TYPE_INT_ARGB);
+                BufferedImage.TYPE_INT_ARGB_PRE);
         Graphics2D g = trimedImage.createGraphics();
         g.drawImage(inputImage, 0, 0, trimedImage.getWidth(),
                 trimedImage.getHeight(), 1, 1, inputImage.getWidth() - 1,
@@ -243,13 +266,13 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
     private BufferedImage generateBordersImage(BufferedImage source,
                                                int trimedWidth, int trimedHeight) throws Wrong9PatchException {
         BufferedImage finalBorder = new BufferedImage(trimedWidth + 2,
-                trimedHeight + 2, BufferedImage.TYPE_INT_ARGB);
+                trimedHeight + 2, BufferedImage.TYPE_INT_ARGB_PRE);
         int cutW = source.getWidth() - 2;
         int cutH = source.getHeight() - 2;
         {
             // left border
             BufferedImage leftBorder = new BufferedImage(1, cutH,
-                    BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage.TYPE_INT_ARGB_PRE);
             leftBorder.setRGB(0, 0, 1, cutH,
                     source.getRGB(0, 1, 1, cutH, null, 0, 1), 0, 1);
             this.verifyBorderImage(leftBorder);
@@ -260,7 +283,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
         {
             // right border
             BufferedImage rightBorder = new BufferedImage(1, cutH,
-                    BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage.TYPE_INT_ARGB_PRE);
             rightBorder.setRGB(0, 0, 1, cutH,
                     source.getRGB(cutW + 1, 1, 1, cutH, null, 0, 1), 0, 1);
             this.verifyBorderImage(rightBorder);
@@ -272,7 +295,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
         {
             // top border
             BufferedImage topBorder = new BufferedImage(cutW, 1,
-                    BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage.TYPE_INT_ARGB_PRE);
             topBorder.setRGB(0, 0, cutW, 1,
                     source.getRGB(1, 0, cutW, 1, null, 0, cutW), 0, cutW);
             this.verifyBorderImage(topBorder);
@@ -283,7 +306,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
         {
             // bottom border
             BufferedImage bottomBorder = new BufferedImage(cutW, 1,
-                    BufferedImage.TYPE_INT_ARGB);
+                    BufferedImage.TYPE_INT_ARGB_PRE);
             bottomBorder
                     .setRGB(0, 0, cutW, 1,
                             source.getRGB(1, cutH + 1, cutW, 1, null, 0, cutW),
@@ -332,7 +355,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
         }
 
         BufferedImage img = new BufferedImage(targetWidth, targetHeight,
-                BufferedImage.TYPE_INT_ARGB);
+                BufferedImage.TYPE_INT_ARGB_PRE);
         img.setRGB(0, 0, targetWidth, targetHeight, newData, 0, targetWidth);
 
         return img;
