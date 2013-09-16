@@ -15,6 +15,7 @@
  */
 package net.redwarp.tool.resizer.worker;
 
+import com.sixlegs.png.PngImage;
 import net.redwarp.tool.resizer.misc.Localization;
 import net.redwarp.tool.resizer.table.Operation;
 import net.redwarp.tool.resizer.table.OperationStatus;
@@ -59,6 +60,9 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
                 inputImage.getGraphics().drawImage(tempImage, 0, 0, null);
 
 //                inputImage = ImageIO.read(this.inputFile);
+
+                PngImage png = new PngImage();
+                inputImage = png.read(this.inputFile);
                 //Image img = Toolkit.getDefaultToolkit().createImage(url);
 //                if (inputImage.getType() != BufferedImage.TYPE_INT_ARGB_PRE && inputImage.getType() != BufferedImage.TYPE_INT_ARGB) {
 //                    BufferedImage tempImage = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
