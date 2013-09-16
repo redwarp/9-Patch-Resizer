@@ -53,18 +53,23 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
         try {
             BufferedImage inputImage;
             synchronized (fileLock) {
-                inputImage = ImageIO.read(this.inputFile);
+                Image tempImage = Toolkit.getDefaultToolkit().createImage(this.inputFile.getAbsolutePath());
+                ImageIcon tempIcon = new ImageIcon(tempImage);
+                inputImage = new BufferedImage(tempIcon.getIconWidth(), tempIcon.getIconHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
+                inputImage.getGraphics().drawImage(tempImage, 0, 0, null);
+
+//                inputImage = ImageIO.read(this.inputFile);
                 //Image img = Toolkit.getDefaultToolkit().createImage(url);
-                if (inputImage.getType() != BufferedImage.TYPE_INT_ARGB_PRE && inputImage.getType() != BufferedImage.TYPE_INT_ARGB) {
-                    BufferedImage tempImage = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
-                    tempImage.getGraphics().drawImage(inputImage, 0, 0, null);
-//                    Graphics2D tempGraphics = tempImage.createGraphics();
-//                    tempGraphics.setComposite(AlphaComposite.Clear);
-//                    tempGraphics.fillRect(0, 0, inputImage.getWidth(), inputImage.getHeight());
-//                    tempGraphics.setComposite(AlphaComposite.SrcOver);
-//                    tempGraphics.drawRenderedImage(inputImage, new AffineTransform());
-                    inputImage = tempImage;
-                }
+//                if (inputImage.getType() != BufferedImage.TYPE_INT_ARGB_PRE && inputImage.getType() != BufferedImage.TYPE_INT_ARGB) {
+//                    BufferedImage tempImage = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
+//                    tempImage.getGraphics().drawImage(inputImage, 0, 0, null);
+////                    Graphics2D tempGraphics = tempImage.createGraphics();
+////                    tempGraphics.setComposite(AlphaComposite.Clear);
+////                    tempGraphics.fillRect(0, 0, inputImage.getWidth(), inputImage.getHeight());
+////                    tempGraphics.setComposite(AlphaComposite.SrcOver);
+////                    tempGraphics.drawRenderedImage(inputImage, new AffineTransform());
+//                    inputImage = tempImage;
+//                }
             }
             if (inputImage == null) {
                 this.operation.setStatus(OperationStatus.ERROR,
@@ -179,7 +184,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
             // }
             this.operation.setStatus(OperationStatus.FINISH);
             this.publish(this.operation);
-        } catch (IOException e) {
+        } catch (Exception e) {
             this.operation.setStatus(OperationStatus.ERROR);
             this.publish(this.operation);
         }
