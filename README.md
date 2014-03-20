@@ -1,8 +1,9 @@
 9-Patch-Resizer
 ===============
 
-A resizer tool to automaticaly resize png files and 9 patches in several densities
-=9Patch Resizer=
+A resizer tool to automaticaly resize png files and 9 patches in several densities (previously hosted on https://code.google.com/p/9patch-resizer/
+
+# 9Patch Resizer
 
 Let's face it : juggling with densities for Android is a bit of a pain, especially when dealing with 9 patch png.
 
@@ -16,19 +17,19 @@ Current version : *1.3.1*
 
 You're using 9patch resizer for your apps ? Don't hesitate and leave me a message!
 
-=Links=
+# Links
 
  * Images and stuff found on http://www.clker.com/ (The online royalty free public domain clip art)
  * Images are downsized using an optimized incremental scaling algorithm proposed by Chris Campbell (whoever that is) - http://today.java.net/pub/a/today/2007/04/03/perils-of-image-getscaledinstance.html
 
-=Roadmap=
+# Roadmap
 
  * Command line support
  * A few optimisations
  * Options to set the input density (if people wan't to downsize from hdpi and not from xdpi for instance)
  * Resize @2x (apple stuff) as well
 
-=Anyway...=
+# Anyway...
 
 If for some weird reasons, some of your PNG files aren't resized properly, don't hesitate to send them to me, so that I can investigate !
 
