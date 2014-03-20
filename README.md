@@ -1,7 +1,7 @@
 9-Patch-Resizer
 ===============
 
-A resizer tool to automaticaly resize png files and 9 patches in several densities (previously hosted on https://code.google.com/p/9patch-resizer/
+A resizer tool to automaticaly resize png files and 9 patches in several densities (previously hosted on https://code.google.com/p/9patch-resizer/)
 
 # 9Patch Resizer
 
@@ -11,7 +11,7 @@ And then comes this tool, that takes a xhdpi PNG file, or 9.png file, and genera
 
 As simple as drag and drop can get.
 
-And here is the [WhatsNew changelog]
+And here is the [changelog](https://github.com/redwarp/9-Patch-Resizer.wiki.git)
 
 Current version : *1.3.1*
 
