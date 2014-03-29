@@ -27,7 +27,7 @@ public class Localization {
         try {
             return bundle.getString(key);
         } catch (MissingResourceException e) {
-            return new String(key);
+            return key;
         }
     }
 
