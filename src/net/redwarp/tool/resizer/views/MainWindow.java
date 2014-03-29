@@ -31,6 +31,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 @SuppressWarnings("serial")
@@ -87,7 +88,7 @@ public class MainWindow extends JFrame {
         this.inputPanel.setPreferredSize(new Dimension(10, 140));
         this.getContentPane().add(this.inputPanel, "input");
 
-        this.xhdpiButton = new JButton(Localization.get("xhdpi"));
+        this.xhdpiButton = new JButton(String.format(Locale.getDefault(), Localization.get("xhdpi"), ScreenDensity.getDefaultInputDensity().getName()));
         this.xhdpiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -119,6 +120,7 @@ public class MainWindow extends JFrame {
                 JComboBox box = (JComboBox) actionEvent.getSource();
                 ScreenDensity selectedDensity = (ScreenDensity) box.getSelectedItem();
                 ScreenDensity.setDefaultInputDensity(selectedDensity);
+                xhdpiButton.setText(String.format(Locale.getDefault(), Localization.get("xhdpi"), selectedDensity.getName()));
             }
         });
         inputDensityChoice.setAlignmentX(Component.LEFT_ALIGNMENT);
