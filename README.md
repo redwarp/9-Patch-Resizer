@@ -1,9 +1,8 @@
-9-Patch-Resizer
-===============
+# ![Tools](https://github.com/redwarp/9-Patch-Resizer/blob/develop/res/img/icon_64.png) 9-Patch-Resizer
 
 A resizer tool to automaticaly resize png files and 9 patches in several densities (previously hosted on https://code.google.com/p/9patch-resizer/)
 
-# 9Patch Resizer
+## What is it ?
 
 Let's face it : juggling with densities for Android is a bit of a pain, especially when dealing with 9 patch png.
 
