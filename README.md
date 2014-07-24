@@ -1,4 +1,4 @@
-# ![Tools](https://github.com/redwarp/9-Patch-Resizer/blob/develop/res/img/icon_64.png) 9-Patch-Resizer
+# ![Tools](https://github.com/redwarp/9-Patch-Resizer/blob/develop/res/img/icon_32.png) 9-Patch-Resizer
 
 A resizer tool to automaticaly resize png files and 9 patches in several densities (previously hosted on https://code.google.com/p/9patch-resizer/)
 
