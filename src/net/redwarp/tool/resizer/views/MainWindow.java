@@ -112,7 +112,7 @@ public class MainWindow extends JFrame {
         JLabel inputLabel = new JLabel(Localization.get("input_density"));
         inputLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         optionPanel.add(inputLabel);
-        JComboBox inputDensityChoice = new JComboBox(new Vector<ScreenDensity>(ScreenDensity.getSupportedScreenDensity()));
+        JComboBox<ScreenDensity> inputDensityChoice = new JComboBox<ScreenDensity>(new Vector<ScreenDensity>(ScreenDensity.getSupportedScreenDensity()));
         inputDensityChoice.setSelectedItem(ScreenDensity.getDefaultInputDensity());
         inputDensityChoice.addActionListener(new ActionListener() {
             @Override
