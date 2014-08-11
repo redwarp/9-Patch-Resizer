@@ -55,7 +55,7 @@ public class MainWindow extends JFrame {
     private final Action action = new SwingAction();
 
     public MainWindow() {
-        this.setSize(new Dimension(450, 350));
+        this.setSize(new Dimension(500, 370));
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle(Localization.get("app_name"));
 
@@ -145,6 +145,18 @@ public class MainWindow extends JFrame {
             optionPanel.add(box);
         }
         optionPanel.add(Box.createVerticalGlue());
+
+        final JButton saveButton = new JButton(Localization.get("save"));
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ScreenDensity.save(saveButton);
+            }
+        });
+        saveButton.setToolTipText(Localization.get("save_tooltip"));
+        optionPanel.add(saveButton);
+        optionPanel.add(Box.createVerticalGlue());
+
         optionPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Options"), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
         this.inputPanel.add(optionPanel, BorderLayout.LINE_START);
