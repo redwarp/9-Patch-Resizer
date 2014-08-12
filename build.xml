@@ -65,7 +65,7 @@
         </java>
     </target>
 	<target name="tojar">
-		<echo message="Creating jar"></echo>
+		<echo message="Creating jar"/>
 		<jar basedir="${bin}" destfile="Resizer_raw.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.redwarp.tool.resizer.Main"/>
