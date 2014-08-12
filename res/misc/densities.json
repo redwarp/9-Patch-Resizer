@@ -1,35 +1,40 @@
 {
+    "source": "xxhdpi",
     "densities": [
-    {
-                "name": "xxhdpi",
-                "scale": 3,
-                "active": false
-            },
         {
-            "name": "xhdpi",
-            "scale": 2,
-            "active": true
-        },
-        {
-            "name": "hdpi",
-            "scale": 1.5,
-            "active": true
-        },
-        {
-            "name": "tvdpi",
-            "scale": 1.33,
+            "scale": 4,
+            "name": "xxxhdpi",
             "active": false
         },
         {
-            "name": "mdpi",
-            "scale": 1,
+            "scale": 3,
+            "name": "xxhdpi",
             "active": true
         },
         {
-            "name": "ldpi",
-            "scale": 0.75,
+            "scale": 2,
+            "name": "xhdpi",
             "active": true
+        },
+        {
+            "scale": 1.5,
+            "name": "hdpi",
+            "active": true
+        },
+        {
+            "scale": 1.33,
+            "name": "tvdpi",
+            "active": false
+        },
+        {
+            "scale": 1,
+            "name": "mdpi",
+            "active": true
+        },
+        {
+            "scale": 0.75,
+            "name": "ldpi",
+            "active": false
         }
-    ],
-    "source": "xhdpi"
+    ]
 }

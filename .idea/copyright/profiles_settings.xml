@@ -1,5 +1,3 @@
 <component name="CopyrightManager">
-  <settings default="Redwarp">
-    <module2copyright />
-  </settings>
+  <settings default="Redwarp" />
 </component>

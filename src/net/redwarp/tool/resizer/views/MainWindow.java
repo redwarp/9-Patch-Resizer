@@ -31,6 +31,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 @SuppressWarnings("serial")
@@ -54,7 +55,7 @@ public class MainWindow extends JFrame {
     private final Action action = new SwingAction();
 
     public MainWindow() {
-        this.setSize(new Dimension(450, 350));
+        this.setSize(new Dimension(500, 370));
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setTitle(Localization.get("app_name"));
 
@@ -87,7 +88,7 @@ public class MainWindow extends JFrame {
         this.inputPanel.setPreferredSize(new Dimension(10, 140));
         this.getContentPane().add(this.inputPanel, "input");
 
-        this.xhdpiButton = new JButton(Localization.get("xhdpi"));
+        this.xhdpiButton = new JButton(String.format(Locale.getDefault(), Localization.get("xhdpi"), ScreenDensity.getDefaultInputDensity().getName()));
         this.xhdpiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent arg0) {
@@ -111,7 +112,7 @@ public class MainWindow extends JFrame {
         JLabel inputLabel = new JLabel(Localization.get("input_density"));
         inputLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         optionPanel.add(inputLabel);
-        JComboBox inputDensityChoice = new JComboBox(new Vector<ScreenDensity>(ScreenDensity.getSupportedScreenDensity()));
+        JComboBox<ScreenDensity> inputDensityChoice = new JComboBox<ScreenDensity>(new Vector<ScreenDensity>(ScreenDensity.getSupportedScreenDensity()));
         inputDensityChoice.setSelectedItem(ScreenDensity.getDefaultInputDensity());
         inputDensityChoice.addActionListener(new ActionListener() {
             @Override
@@ -119,6 +120,7 @@ public class MainWindow extends JFrame {
                 JComboBox box = (JComboBox) actionEvent.getSource();
                 ScreenDensity selectedDensity = (ScreenDensity) box.getSelectedItem();
                 ScreenDensity.setDefaultInputDensity(selectedDensity);
+                xhdpiButton.setText(String.format(Locale.getDefault(), Localization.get("xhdpi"), selectedDensity.getName()));
             }
         });
         inputDensityChoice.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -143,6 +145,18 @@ public class MainWindow extends JFrame {
             optionPanel.add(box);
         }
         optionPanel.add(Box.createVerticalGlue());
+
+        final JButton saveButton = new JButton(Localization.get("save"));
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ScreenDensity.save(saveButton);
+            }
+        });
+        saveButton.setToolTipText(Localization.get("save_tooltip"));
+        optionPanel.add(saveButton);
+        optionPanel.add(Box.createVerticalGlue());
+
         optionPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createTitledBorder("Options"), BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
         this.inputPanel.add(optionPanel, BorderLayout.LINE_START);

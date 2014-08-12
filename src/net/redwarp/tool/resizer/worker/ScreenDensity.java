@@ -15,24 +15,21 @@
  */
 package net.redwarp.tool.resizer.worker;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.swing.*;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ScreenDensity {
+    private static final String KEY_DENSITIES = "densities";
+    private static final String KEY_SOURCE = "source";
+    public static final String DENSITIES_PATHNAME = "./densities.json";
     private float scale;
     private String name;
-
 
     private boolean active;
 
@@ -40,22 +37,26 @@ public class ScreenDensity {
     private static ScreenDensity defaultInputDensity = null;
 
     static {
+        load();
+    }
+
+    private static void load() {
         try {
             Gson gson = new Gson();
             JsonParser parser = new JsonParser();
             InputStream preferenceStream;
             try {
-                preferenceStream = new FileInputStream(new File("./densities.json"));
+                preferenceStream = new FileInputStream(new File(DENSITIES_PATHNAME));
             } catch (Exception e) {
                 preferenceStream = ScreenDensity.class.getClassLoader().getResourceAsStream("misc/densities.json");
             }
             JsonObject densitiesObject = parser.parse(new InputStreamReader(preferenceStream)).getAsJsonObject();
-            JsonArray densitiesArray = densitiesObject.get("densities").getAsJsonArray();
+            JsonArray densitiesArray = densitiesObject.get(KEY_DENSITIES).getAsJsonArray();
 
             Type listType = new TypeToken<List<ScreenDensity>>() {
             }.getType();
             list = gson.fromJson(densitiesArray, listType);
-            String defaultDensityName = densitiesObject.get("source").getAsString();
+            String defaultDensityName = densitiesObject.get(KEY_SOURCE).getAsString();
             for (ScreenDensity density : list) {
                 if (density.getName().equals(defaultDensityName)) {
                     defaultInputDensity = density;
@@ -70,6 +71,23 @@ public class ScreenDensity {
             list.add(new ScreenDensity("xhdpi", 2.0f, true));
             defaultInputDensity = list.get(0);
         }
+    }
+
+    public static void save(JButton saveButton) {
+        saveButton.setEnabled(false);
+        JsonObject rootObject = new JsonObject();
+        // Save source
+        rootObject.addProperty(KEY_SOURCE, defaultInputDensity.getName());
+
+        // Save densities
+        Gson gson = new Gson();
+        Type listOfDensityType = new TypeToken<List<ScreenDensity>>() {
+        }.getType();
+        JsonElement densities = gson.toJsonTree(list, listOfDensityType);
+        rootObject.add(KEY_DENSITIES, densities);
+
+        SaveWorker worker = new SaveWorker(saveButton, rootObject.toString());
+        worker.execute();
     }
 
     private ScreenDensity(String name, float density, boolean active) {
@@ -117,5 +135,41 @@ public class ScreenDensity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public static class SaveWorker extends SwingWorker<Void, Void> {
+        private final String mSavePayload;
+        private final JButton mButton;
+
+        public SaveWorker(JButton saveButton, String savePayload) {
+            mButton = saveButton;
+            mSavePayload = savePayload;
+        }
+
+
+
+        @Override
+        protected Void doInBackground() throws Exception {
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(DENSITIES_PATHNAME);
+                PrintWriter writer = new PrintWriter(fos);
+                writer.write(mSavePayload);
+
+                writer.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                System.out.println("Couldn't save");
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            if (mButton != null) {
+                mButton.setEnabled(true);
+            }
+        }
     }
 }

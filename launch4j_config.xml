@@ -1,35 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\Akaiwarp\workspace\Resizer\Resizer_1.3.1.jar</jar>
-  <outfile>C:\Users\Akaiwarp\workspace\Resizer\Resizer_1.3.1.exe</outfile>
+  <jar>C:\Users\Redwarp\workspace\Resizer\Resizer_proguard.jar</jar>
+  <outfile>C:\Users\Redwarp\workspace\Resizer\Resizer_1.3.2.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
   <priority>normal</priority>
   <downloadUrl>http://java.com/download</downloadUrl>
   <supportUrl></supportUrl>
-  <customProcName>false</customProcName>
   <stayAlive>false</stayAlive>
   <manifest></manifest>
-  <icon>C:\Users\Akaiwarp\workspace\Resizer\extra\icon_512.ico</icon>
+  <icon>C:\Users\Redwarp\workspace\Resizer\extra\icon_512.ico</icon>
   <singleInstance>
     <mutexName>resizer</mutexName>
     <windowTitle></windowTitle>
   </singleInstance>
   <jre>
     <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
     <minVersion>1.6.0</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
   </jre>
   <versionInfo>
-    <fileVersion>1.3.1.0</fileVersion>
-    <txtFileVersion>1.3.1</txtFileVersion>
+    <fileVersion>1.3.2.0</fileVersion>
+    <txtFileVersion>1.3.2</txtFileVersion>
     <fileDescription>9Patch Resizer</fileDescription>
-    <copyright>Redwarp - 2013</copyright>
-    <productVersion>1.3.1.0</productVersion>
-    <txtProductVersion>1.3.1</txtProductVersion>
+    <copyright>Redwarp - 2014</copyright>
+    <productVersion>1.3.2.0</productVersion>
+    <txtProductVersion>1.3.2</txtProductVersion>
     <productName>9Patch Resizer</productName>
     <companyName></companyName>
     <internalName>Resizer</internalName>
