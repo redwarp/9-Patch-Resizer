@@ -3,7 +3,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
   <jar>C:\Users\Redwarp\workspace\Resizer\Resizer_proguard.jar</jar>
-  <outfile>C:\Users\Redwarp\workspace\Resizer\Resizer_1.3.2.exe</outfile>
+  <outfile>C:\Users\Redwarp\workspace\Resizer\Resizer_1.3.3.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
@@ -26,12 +26,12 @@
     <runtimeBits>64/32</runtimeBits>
   </jre>
   <versionInfo>
-    <fileVersion>1.3.2.0</fileVersion>
-    <txtFileVersion>1.3.2</txtFileVersion>
+    <fileVersion>1.3.3.0</fileVersion>
+    <txtFileVersion>1.3.3</txtFileVersion>
     <fileDescription>9Patch Resizer</fileDescription>
     <copyright>Redwarp - 2014</copyright>
-    <productVersion>1.3.2.0</productVersion>
-    <txtProductVersion>1.3.2</txtProductVersion>
+    <productVersion>1.3.3.0</productVersion>
+    <txtProductVersion>1.3.3</txtProductVersion>
     <productName>9Patch Resizer</productName>
     <companyName></companyName>
     <internalName>Resizer</internalName>
