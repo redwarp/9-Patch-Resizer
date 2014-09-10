@@ -29,9 +29,14 @@ You're using 9patch resizer for your apps ? Don't hesitate and leave me a messag
 
 ## Roadmap
 
-- [ ] Command line support
+- [x] Command line support
 - [ ] A few optimisations
 - [x] Options to set the input density (if people wan't to downsize from hdpi and not from xdpi for instance)
+ 
+## Contributors
+
+ * redwarp - That would be me
+ * Jean-Baptiste LAB - Made the app working in command line
 
 ## Anyway...
 
