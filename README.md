@@ -35,8 +35,10 @@ You're using 9patch resizer for your apps ? Don't hesitate and leave me a messag
  
 ## Contributors
 
- * redwarp - That would be me
+ * redwarp
  * Jean-Baptiste LAB - Made the app working in command line
+
+Join us, and together, we can rule the galaxy as coders and...
 
 ## Anyway...
 
