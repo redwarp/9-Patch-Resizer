@@ -32,6 +32,7 @@ You're using 9patch resizer for your apps ? Don't hesitate and leave me a messag
 - [x] Command line support
 - [ ] A few optimisations
 - [x] Options to set the input density (if people wan't to downsize from hdpi and not from xdpi for instance)
+- [ ] Proper JPG support
  
 ## Contributors
 
@@ -39,6 +40,10 @@ You're using 9patch resizer for your apps ? Don't hesitate and leave me a messag
  * Jean-Baptiste LAB - Made the app working in command line
 
 Join us, and together, we can rule the galaxy as coders and...
+
+## Notable forks
+
+ * Soymonitus did a fork that also handles iOS resources, might come in handy for some people: https://github.com/soymonitus/9-Patch-Resizer
 
 ## Anyway...
 
