@@ -15,74 +15,73 @@
  */
 package net.redwarp.tool.resizer;
 
-import java.util.ArrayList;
-
 import net.redwarp.tool.resizer.FileProcessor.FileProcessorStatusListener;
 import net.redwarp.tool.resizer.misc.Localization;
 import net.redwarp.tool.resizer.views.MainWindow;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class Main {
-	static class StatusListener implements FileProcessorStatusListener {
-		int count = 0;
-		int current = 0;
-		int failureCount = 0;
+    static class StatusListener implements FileProcessorStatusListener {
+        int count = 0;
+        int current = 0;
+        int failureCount = 0;
 
-		public StatusListener(int count) {
-			this.count = count;
-		}
+        public StatusListener(int count) {
+            this.count = count;
+        }
 
-		@Override
-		public void onSuccess() {
-			this.current++;
-			if (this.current == this.count) {
-				System.exit(failureCount);
-			}
-		}
+        @Override
+        public void onSuccess() {
+            this.current++;
+            if (this.current == this.count) {
+                System.exit(failureCount);
+            }
+        }
 
-		@Override
-		public void onFailure(String msg) {
-			System.err.print(msg + "\n");
-			this.current++;
-			this.failureCount++;
-			if (this.current == this.count) {
-				System.exit(failureCount);
-			}
-		}
-	}
+        @Override
+        public void onFailure(String msg) {
+            System.err.print(msg + "\n");
+            this.current++;
+            this.failureCount++;
+            if (this.current == this.count) {
+                System.exit(failureCount);
+            }
+        }
+    }
 
-	public static void main(String[] args) {
-		// Apple only stuff
-		System.setProperty("apple.laf.useScreenMenuBar", "true");
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-				Localization.get("app_name"));
-		if (args.length > 0) {
-			StatusListener l = new StatusListener(args.length);
-			ArrayList<FileProcessor> processors = new ArrayList<FileProcessor>();
+    public static void main(String[] args) {
+        // Apple only stuff
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+                Localization.get("app_name"));
+        if (args.length > 0) {
+            StatusListener l = new StatusListener(args.length);
+            ArrayList<FileProcessor> processors = new ArrayList<FileProcessor>();
 
-			for (String s : args) {
-				processors.add(new FileProcessor(s, l));
-			}
-			for (FileProcessor p : processors) {
-				p.process();
-			}
-		} else {
+            for (String s : args) {
+                processors.add(new FileProcessor(s, l));
+            }
+            for (FileProcessor p : processors) {
+                p.process();
+            }
+        } else {
 
-			try {
-				UIManager.setLookAndFeel(UIManager
-						.getSystemLookAndFeelClassName());
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (UnsupportedLookAndFeelException e) {
-				e.printStackTrace();
-			}
+            try {
+                UIManager.setLookAndFeel(UIManager
+                        .getSystemLookAndFeelClassName());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
 
-			new MainWindow().setVisible(true);
-		}
-	}
+            new MainWindow().setVisible(true);
+        }
+    }
 }

@@ -60,6 +60,18 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
                         Localization.get("error_wrong_png"));
                 this.publish(this.operation);
                 return null;
+            } else {
+//                if (inputImage.getType() != BufferedImage.TYPE_INT_ARGB) {
+//                    BufferedImage tempImage = new BufferedImage(
+//                            inputImage.getWidth(), inputImage.getHeight(),
+//                            BufferedImage.TYPE_INT_ARGB);
+//                    Graphics2D g = tempImage.createGraphics();
+//                    g.drawImage(inputImage, 0, 0, tempImage.getWidth(),
+//                            tempImage.getHeight(), 0, 0, inputImage.getWidth(),
+//                            inputImage.getHeight(), null);
+//                    g.dispose();
+//                    inputImage = tempImage;
+//                }
             }
 
             this.operation.setStatus(OperationStatus.IN_PROGRESS);
@@ -84,12 +96,22 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
                 }
 
                 String name;
+                Output output = null;
                 int extensionPos = this.inputFile.getName().lastIndexOf('.');
                 if (extensionPos != -1) {
-                    name = this.inputFile.getName().substring(0, extensionPos)
-                            + ".png";
+                    String extension = this.inputFile.getName().substring(extensionPos, this.inputFile.getName().length());
+                    if (".png".equalsIgnoreCase(extension)) {
+                        output = Output.PNG;
+                    } else if (".jpg".equalsIgnoreCase(extension) || ".jpeg".equalsIgnoreCase(extension)) {
+                        output = Output.JPG;
+                    }
+                }
+
+                if (output != null) {
+                    name = this.inputFile.getName().substring(0, extensionPos) + "." + output.getFormat();
                 } else {
                     name = this.inputFile.getName();
+                    output = Output.PNG;
                 }
 
                 File outputFile = new File(outputFolder, name);
@@ -140,7 +162,8 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
                 try {
 
                     synchronized (fileLock) {
-                        ImageIO.write(outputImage, "png", outputFile);
+                        ImageWriter.write(outputImage,output, outputFile);
+//                        ImageIO.write(outputImage, output.getFormat(), outputFile);
                     }
 
                 } catch (IOException e) {

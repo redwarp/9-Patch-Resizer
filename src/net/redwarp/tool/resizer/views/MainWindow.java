@@ -18,6 +18,7 @@ package net.redwarp.tool.resizer.views;
 
 import net.iharder.dnd.FileDrop;
 import net.redwarp.tool.resizer.misc.Localization;
+import net.redwarp.tool.resizer.misc.NameValidator;
 import net.redwarp.tool.resizer.table.Operation;
 import net.redwarp.tool.resizer.table.ResultTable;
 import net.redwarp.tool.resizer.worker.ImageScaler;
@@ -182,8 +183,8 @@ public class MainWindow extends JFrame {
             @Override
             public void filesDropped(Container source, File[] files) {
                 for (File input : files) {
-                    String name = input.getName().toLowerCase();
-                    if (name.endsWith(".png") || name.endsWith(".jpg")) {
+                    String filename = input.getName();
+                    if (NameValidator.isFilenameValid(filename)) {
                         MainWindow.this.mntmClear.setEnabled(true);
                         CardLayout layout = (CardLayout) MainWindow.this
                                 .getContentPane().getLayout();
