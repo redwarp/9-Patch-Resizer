@@ -38,8 +38,8 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
     private ScreenDensity inputDensity;
     private static ExecutorService executor = Executors
             .newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    private static Object fileLock = new Object();
-    private static Object folderLock = new Object();
+    private static final Object fileLock = new Object();
+    private static final Object folderLock = new Object();
 
     public ImageScaler(final Operation operation,
                        final ScreenDensity inputDensity) {
@@ -70,7 +70,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 
             File parent = this.inputFile.getParentFile();
             for (ScreenDensity density : densityList) {
-                if (density.isActive() == false) {
+                if (!density.isActive()) {
                     continue;
                 }
                 File outputFolder;
@@ -96,10 +96,6 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
                 if (outputFile.exists()) {
                     outputFile.delete();
                 }
-
-                // if (density.equals(this.inputDensity)) {
-                // FileTools.copyfile(this.inputFile, outputFile);
-                // } else {
 
                 BufferedImage outputImage;
                 if (this.inputFile.getName().endsWith(".9.png")) {
