@@ -16,11 +16,15 @@
 
 package net.redwarp.tool.resizer.worker;
 
+import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.stream.FileImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * User: benoit.vermont@airtag.com
@@ -36,8 +40,21 @@ public class ImageWriter {
             g2d.drawImage(outputImage, 0, 0, null);
             g2d.dispose();
             outputImage = img;
-        }
 
-        ImageIO.write(outputImage, output.getFormat(), outputFile);
+            Iterator<javax.imageio.ImageWriter> itor = ImageIO.getImageWritersByFormatName("jpeg");
+            javax.imageio.ImageWriter writer = itor.next();
+            ImageWriteParam imageWriteParam = writer.getDefaultWriteParam();
+            imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            imageWriteParam.setCompressionQuality(0.9f);
+
+            FileImageOutputStream outputStream = new FileImageOutputStream(outputFile);
+            writer.setOutput(outputStream);
+            IIOImage image = new IIOImage(outputImage, null, null);
+            writer.write(null, image, imageWriteParam);
+            writer.dispose();
+
+        } else {
+            ImageIO.write(outputImage, output.getFormat(), outputFile);
+        }
     }
 }
