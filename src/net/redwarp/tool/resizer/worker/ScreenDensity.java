@@ -111,6 +111,7 @@ public class ScreenDensity {
     }.getType();
     JsonElement densities = gson.toJsonTree(list, listOfDensityType);
     rootObject.add(KEY_DENSITIES, densities);
+    rootObject.addProperty(KEY_KEEP_SAME_DENSITY_FILE, keepSameDensityFile);
 
     SaveWorker worker = new SaveWorker(saveButton, rootObject.toString());
     worker.execute();
@@ -146,6 +147,10 @@ public class ScreenDensity {
   // A flag to indicate if we should copy the original image, if the input and output are of the same density.
   public static boolean shouldKeepSameDensityFile() {
     return keepSameDensityFile;
+  }
+
+  public static void setShouldKeepSameDensityFile(boolean shouldKeepSameDensityFile) {
+    keepSameDensityFile = shouldKeepSameDensityFile;
   }
 
   public static void setDefaultInputDensity(ScreenDensity density) {
