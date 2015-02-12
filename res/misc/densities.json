@@ -1,40 +1,41 @@
 {
-    "source": "xxhdpi",
-    "densities": [
-        {
-            "scale": 4,
-            "name": "xxxhdpi",
-            "active": false
-        },
-        {
-            "scale": 3,
-            "name": "xxhdpi",
-            "active": true
-        },
-        {
-            "scale": 2,
-            "name": "xhdpi",
-            "active": true
-        },
-        {
-            "scale": 1.5,
-            "name": "hdpi",
-            "active": true
-        },
-        {
-            "scale": 1.33,
-            "name": "tvdpi",
-            "active": false
-        },
-        {
-            "scale": 1,
-            "name": "mdpi",
-            "active": true
-        },
-        {
-            "scale": 0.75,
-            "name": "ldpi",
-            "active": false
-        }
-    ]
+  "source": "xxhdpi",
+  "densities": [
+    {
+      "scale": 4,
+      "name": "xxxhdpi",
+      "active": false
+    },
+    {
+      "scale": 3,
+      "name": "xxhdpi",
+      "active": true
+    },
+    {
+      "scale": 2,
+      "name": "xhdpi",
+      "active": true
+    },
+    {
+      "scale": 1.5,
+      "name": "hdpi",
+      "active": true
+    },
+    {
+      "scale": 1.33,
+      "name": "tvdpi",
+      "active": false
+    },
+    {
+      "scale": 1,
+      "name": "mdpi",
+      "active": true
+    },
+    {
+      "scale": 0.75,
+      "name": "ldpi",
+      "active": false
+    }
+  ],
+  "keep_same_density_file": false
 }
