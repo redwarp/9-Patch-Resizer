@@ -117,7 +117,7 @@ public class MainWindow extends JFrame {
     JLabel inputLabel = new JLabel(Localization.get("input_density"));
     inputLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     optionPanel.add(inputLabel);
-    JComboBox<ScreenDensity>
+    final JComboBox<ScreenDensity>
         inputDensityChoice =
         new JComboBox<ScreenDensity>(
             new Vector<ScreenDensity>(ScreenDensity.getSupportedScreenDensity()));
@@ -214,6 +214,10 @@ public class MainWindow extends JFrame {
             MainWindow.this.mntmClear.setEnabled(true);
             CardLayout layout = (CardLayout) MainWindow.this
                 .getContentPane().getLayout();
+
+            ScreenDensity selectedDensity = (ScreenDensity) inputDensityChoice.getSelectedItem();
+            instructionLabel.setText(String.format(Locale.getDefault(), Localization.get("xhdpi"),
+                                                             selectedDensity.getName()));
             layout.show(MainWindow.this.getContentPane(), "output");
             Operation operation = new Operation(input);
             MainWindow.this.resultTable.addOperation(operation);
@@ -251,7 +255,7 @@ public class MainWindow extends JFrame {
     new FileDrop<Container>(this.getContentPane(), null, dropListener);
     new FileDrop<Container>(this.outputPanel, null, dropListener);
 
-    this.instructionLabel = new JLabel(Localization.get("xhdpi"));
+    this.instructionLabel = new JLabel("");
     this.instructionLabel.setIcon(this.blueArrowSmall);
     this.instructionLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
     this.outputPanel.add(this.instructionLabel, BorderLayout.SOUTH);
