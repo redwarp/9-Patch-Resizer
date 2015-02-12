@@ -52,7 +52,7 @@ public class ImageWriter {
       javax.imageio.ImageWriter writer = itor.next();
       ImageWriteParam imageWriteParam = writer.getDefaultWriteParam();
       imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-      imageWriteParam.setCompressionQuality(0.8f);
+      imageWriteParam.setCompressionQuality(0.9f);
 
       FileImageOutputStream outputStream = new FileImageOutputStream(outputFile);
       writer.setOutput(outputStream);
