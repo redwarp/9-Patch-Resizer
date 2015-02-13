@@ -16,7 +16,7 @@
 package net.redwarp.tool.resizer.views;
 
 import net.redwarp.tool.resizer.misc.Localization;
-import net.redwarp.tool.resizer.misc.Preferences;
+import net.redwarp.tool.resizer.misc.Configuration;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -31,7 +31,7 @@ public class AboutDialog extends JDialog {
         this.getContentPane().setLayout(new BorderLayout(0, 0));
 
         JLabel lblResizer = new JLabel(Localization.get("app_name") + " "
-                + Preferences.getVersion());
+                + Configuration.getVersion());
         lblResizer.setBorder(new EmptyBorder(10, 10, 10, 10));
         lblResizer.setVerticalTextPosition(SwingConstants.BOTTOM);
         lblResizer.setIconTextGap(10);
