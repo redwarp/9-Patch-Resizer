@@ -19,10 +19,15 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class Configuration {
-    private static ResourceBundle bundle = ResourceBundle.getBundle(
-            "misc.configuration", Locale.FRANCE);
 
-    public static String getVersion() {
-        return bundle.getString("version");
-    }
+  private static ResourceBundle bundle = ResourceBundle.getBundle(
+      "misc.configuration", Locale.FRANCE);
+
+  public static String getVersion() {
+    return bundle.getString("version");
+  }
+
+  public static int getVersionCode() {
+    return Integer.valueOf(bundle.getString("versionCode"));
+  }
 }

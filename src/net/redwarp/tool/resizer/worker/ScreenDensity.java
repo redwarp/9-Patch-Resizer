@@ -16,11 +16,14 @@
 package net.redwarp.tool.resizer.worker;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+
+import net.redwarp.tool.resizer.misc.Configuration;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -106,14 +109,16 @@ public class ScreenDensity {
     rootObject.addProperty(KEY_SOURCE, defaultInputDensity.getName());
 
     // Save densities
-    Gson gson = new Gson();
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
     Type listOfDensityType = new TypeToken<List<ScreenDensity>>() {
     }.getType();
     JsonElement densities = gson.toJsonTree(list, listOfDensityType);
     rootObject.add(KEY_DENSITIES, densities);
     rootObject.addProperty(KEY_KEEP_SAME_DENSITY_FILE, keepSameDensityFile);
+    rootObject.addProperty("versionCode", Configuration.getVersionCode());
 
-    SaveWorker worker = new SaveWorker(saveButton, rootObject.toString());
+    SaveWorker worker = new SaveWorker(saveButton, gson.toJson(rootObject));
     worker.execute();
   }
 
