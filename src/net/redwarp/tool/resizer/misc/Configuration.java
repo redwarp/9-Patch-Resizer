@@ -25,7 +25,7 @@ public class Configuration {
   private static Settings settings = null;
 
   public static String getVersion() {
-    return bundle.getString("version");
+    return bundle.getString("versionName");
   }
 
   public static int getVersionCode() {

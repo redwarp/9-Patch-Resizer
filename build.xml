@@ -69,7 +69,7 @@
 		<jar basedir="${bin}" destfile="Resizer_raw.jar">
 			<manifest>
 				<attribute name="Main-Class" value="net.redwarp.tool.resizer.Main"/>
-				<attribute name="Manifest-Version" value="${version}"/>
+				<attribute name="Manifest-Version" value="${versionName}"/>
 				<attribute name="Created-By" value="Redwarp"/>
 			</manifest>
             <!--<fileset dir="${bin}" includes="**/*.class" />-->
@@ -82,6 +82,6 @@
 	</target>
 	<target name="move">
 		<echo message="Renaming jar"/>
-		<copy file="Resizer_proguard.jar" tofile="Resizer_${version}.jar"/>
+		<copy file="Resizer_proguard.jar" tofile="Resizer_${versionName}.jar"/>
 	</target>
 </project>
