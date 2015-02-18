@@ -15,8 +15,9 @@
  */
 package net.redwarp.tool.resizer.table;
 
-import javax.swing.*;
 import java.awt.*;
+
+import javax.swing.*;
 
 public class ResultTable extends JTable {
     private static final long serialVersionUID = -8240707430938246389L;

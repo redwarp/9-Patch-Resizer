@@ -17,10 +17,11 @@ package net.redwarp.tool.resizer.table;
 
 import net.redwarp.tool.resizer.misc.Localization;
 
-import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.table.AbstractTableModel;
 
 public class ResultModel extends AbstractTableModel {
     private static final long serialVersionUID = -6799282358729483044L;

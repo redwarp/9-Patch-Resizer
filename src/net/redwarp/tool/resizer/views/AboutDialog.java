@@ -15,12 +15,13 @@
  */
 package net.redwarp.tool.resizer.views;
 
-import net.redwarp.tool.resizer.misc.Localization;
 import net.redwarp.tool.resizer.misc.Configuration;
+import net.redwarp.tool.resizer.misc.Localization;
+
+import java.awt.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 
 public class AboutDialog extends JDialog {
     private static final long serialVersionUID = 7783865044667012251L;

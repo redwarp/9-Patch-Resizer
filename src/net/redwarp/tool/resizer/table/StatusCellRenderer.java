@@ -17,9 +17,10 @@ package net.redwarp.tool.resizer.table;
 
 import net.redwarp.tool.resizer.misc.Localization;
 
+import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-import java.awt.*;
 
 public class StatusCellRenderer extends DefaultTableCellRenderer {
 
