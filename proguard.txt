@@ -1,6 +1,3 @@
--injars       Resizer_raw.jar
--outjars      Resizer_proguard.jar
--libraryjars  <java.home>/lib/rt.jar
 -printmapping obfuscate/myapplication.map
 
 -optimizationpasses 3
