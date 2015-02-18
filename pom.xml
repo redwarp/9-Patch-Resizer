@@ -20,8 +20,13 @@
     <artifactId>resizer</artifactId>
 
 
-    <version>${versionName}</version>
+    <version>1.3.3</version>
     <name>9Patch Resizer</name>
+
+    <properties>
+        <resizer.versionName>${project.version}</resizer.versionName>
+        <resizer.versionCode>1</resizer.versionCode>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -38,28 +43,22 @@
         <resources>
             <resource>
                 <directory>res</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/configuration.properties</include>
+                </includes>
+            </resource>
+
+            <resource>
+                <directory>res</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/configuration.properties</exclude>
+                </excludes>
             </resource>
         </resources>
 
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0-alpha-2</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>res/misc/configuration.properties</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -131,6 +130,45 @@
                         <lib>${java.home}/lib/rt.jar</lib>
                     </libs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.7.4</version>
+                <executions>
+                    <execution>
+                        <id>launch4j</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <outfile>target/Resizer-${project.version}.exe</outfile>
+                            <jar>target/resizer-${project.version}-proguard.jar</jar>
+                            <classPath>
+                                <mainClass>net.redwarp.tool.resizer.Main</mainClass>
+                                <addDependencies>false</addDependencies>
+                                <preCp>anything</preCp>
+                            </classPath>
+                            <jre>
+                                <minVersion>1.6.0</minVersion>
+                            </jre>
+                            <icon>extra/icon_512.ico</icon>
+                            <versionInfo>
+                                <fileVersion>${project.version}.0</fileVersion>
+                                <txtFileVersion>${project.version}</txtFileVersion>
+                                <fileDescription>9Patch Resizer</fileDescription>
+                                <copyright>Redwarp 2013-2015</copyright>
+                                <productVersion>${project.version}.0</productVersion>
+                                <txtProductVersion>${project.version}</txtProductVersion>
+                                <productName>9Patch Resizer</productName>
+                                <internalName>Resizer</internalName>
+                                <originalFilename>Resizer.exe</originalFilename>
+                            </versionInfo>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 
