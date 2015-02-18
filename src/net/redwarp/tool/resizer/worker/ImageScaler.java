@@ -15,6 +15,7 @@
  */
 package net.redwarp.tool.resizer.worker;
 
+import net.redwarp.tool.resizer.misc.Configuration;
 import net.redwarp.tool.resizer.misc.Localization;
 import net.redwarp.tool.resizer.table.Operation;
 import net.redwarp.tool.resizer.table.OperationStatus;
@@ -79,7 +80,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
       this.operation.setStatus(OperationStatus.IN_PROGRESS);
       this.publish(this.operation);
 
-      List<ScreenDensity> densityList = ScreenDensity
+      List<ScreenDensity> densityList = Configuration.getSettings()
           .getSupportedScreenDensity();
 
       File parent = this.inputFile.getParentFile();
@@ -167,7 +168,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
 
           synchronized (fileLock) {
             // Let's do the worst hack in the universe to speed things up !
-            if (ScreenDensity.shouldKeepSameDensityFile() && output == Output.JPG
+            if (Configuration.getSettings().shouldKeepSameDensityFile() && output == Output.JPG
                 && outputImage.getWidth() == inputImage.getWidth()
                 && outputImage.getHeight() == inputImage.getHeight()) {
               ImageWriter.copy(inputFile, outputFile);

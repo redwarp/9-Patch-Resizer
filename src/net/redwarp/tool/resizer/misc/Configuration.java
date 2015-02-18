@@ -22,6 +22,7 @@ public class Configuration {
 
   private static ResourceBundle bundle = ResourceBundle.getBundle(
       "misc.configuration", Locale.FRANCE);
+  private static Settings settings = null;
 
   public static String getVersion() {
     return bundle.getString("version");
@@ -29,5 +30,12 @@ public class Configuration {
 
   public static int getVersionCode() {
     return Integer.valueOf(bundle.getString("versionCode"));
+  }
+
+  public static Settings getSettings() {
+    if (settings == null) {
+      settings = new Settings();
+    }
+    return settings;
   }
 }

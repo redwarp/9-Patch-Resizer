@@ -16,72 +16,78 @@
 package net.redwarp.tool.resizer;
 
 import net.redwarp.tool.resizer.FileProcessor.FileProcessorStatusListener;
+import net.redwarp.tool.resizer.misc.Configuration;
 import net.redwarp.tool.resizer.misc.Localization;
 import net.redwarp.tool.resizer.views.MainWindow;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
+import javax.swing.*;
+
 public class Main {
-    static class StatusListener implements FileProcessorStatusListener {
-        int count = 0;
-        int current = 0;
-        int failureCount = 0;
 
-        public StatusListener(int count) {
-            this.count = count;
-        }
+  static class StatusListener implements FileProcessorStatusListener {
 
-        @Override
-        public void onSuccess() {
-            this.current++;
-            if (this.current == this.count) {
-                System.exit(failureCount);
-            }
-        }
+    int count = 0;
+    int current = 0;
+    int failureCount = 0;
 
-        @Override
-        public void onFailure(String msg) {
-            System.err.print(msg + "\n");
-            this.current++;
-            this.failureCount++;
-            if (this.current == this.count) {
-                System.exit(failureCount);
-            }
-        }
+    public StatusListener(int count) {
+      this.count = count;
     }
 
-    public static void main(String[] args) {
-        // Apple only stuff
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name",
-                Localization.get("app_name"));
-        if (args.length > 0) {
-            StatusListener l = new StatusListener(args.length);
-            ArrayList<FileProcessor> processors = new ArrayList<FileProcessor>();
-
-            for (String s : args) {
-                processors.add(new FileProcessor(s, l));
-            }
-            for (FileProcessor p : processors) {
-                p.process();
-            }
-        } else {
-
-            try {
-                UIManager.setLookAndFeel(UIManager
-                        .getSystemLookAndFeelClassName());
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (UnsupportedLookAndFeelException e) {
-                e.printStackTrace();
-            }
-
-            new MainWindow().setVisible(true);
-        }
+    @Override
+    public void onSuccess() {
+      this.current++;
+      if (this.current == this.count) {
+        System.exit(failureCount);
+      }
     }
+
+    @Override
+    public void onFailure(String msg) {
+      System.err.print(msg + "\n");
+      this.current++;
+      this.failureCount++;
+      if (this.current == this.count) {
+        System.exit(failureCount);
+      }
+    }
+  }
+
+  public static void main(String[] args) {
+    // Apple only stuff
+    System.setProperty("apple.laf.useScreenMenuBar", "true");
+    System.setProperty("com.apple.mrj.application.apple.menu.about.name",
+                       Localization.get("app_name"));
+    Configuration.getSettings().load("./densities.json");
+
+    if (args.length > 0) {
+      StatusListener l = new StatusListener(args.length);
+      ArrayList<FileProcessor> processors = new ArrayList<FileProcessor>();
+
+      for (String s : args) {
+        processors.add(new FileProcessor(s, l));
+      }
+      for (FileProcessor p : processors) {
+        p.process();
+      }
+    } else {
+
+      try {
+        UIManager.setLookAndFeel(UIManager
+                                     .getSystemLookAndFeelClassName());
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      } catch (InstantiationException e) {
+        e.printStackTrace();
+      } catch (IllegalAccessException e) {
+        e.printStackTrace();
+      } catch (UnsupportedLookAndFeelException e) {
+        e.printStackTrace();
+      }
+
+      new MainWindow().setVisible(true);
+    }
+  }
 }

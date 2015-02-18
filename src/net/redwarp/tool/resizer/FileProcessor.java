@@ -15,6 +15,7 @@
  */
 package net.redwarp.tool.resizer;
 
+import net.redwarp.tool.resizer.misc.Configuration;
 import net.redwarp.tool.resizer.misc.NameValidator;
 import net.redwarp.tool.resizer.table.Operation;
 import net.redwarp.tool.resizer.table.OperationStatus;
@@ -42,7 +43,7 @@ public class FileProcessor {
             Operation operation = new Operation(new File(name));
 
             scaler = new ImageScaler(operation,
-                    ScreenDensity.getDefaultInputDensity()) {
+                    Configuration.getSettings().getDefaultInputDensity()) {
                 @Override
                 protected void process(java.util.List<Operation> chunks) {
                     for (Operation operation : chunks) {

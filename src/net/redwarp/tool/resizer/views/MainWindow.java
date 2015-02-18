@@ -17,6 +17,7 @@
 package net.redwarp.tool.resizer.views;
 
 import net.iharder.dnd.FileDrop;
+import net.redwarp.tool.resizer.misc.Configuration;
 import net.redwarp.tool.resizer.misc.Localization;
 import net.redwarp.tool.resizer.misc.NameValidator;
 import net.redwarp.tool.resizer.table.Operation;
@@ -92,7 +93,7 @@ public class MainWindow extends JFrame {
 
     this.xhdpiButton =
         new JButton(String.format(Locale.getDefault(), Localization.get("xhdpi"),
-                                  ScreenDensity.getDefaultInputDensity().getName()));
+                                  Configuration.getSettings().getDefaultInputDensity().getName()));
     this.xhdpiButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent arg0) {
@@ -120,14 +121,14 @@ public class MainWindow extends JFrame {
     final JComboBox<ScreenDensity>
         inputDensityChoice =
         new JComboBox<ScreenDensity>(
-            new Vector<ScreenDensity>(ScreenDensity.getSupportedScreenDensity()));
-    inputDensityChoice.setSelectedItem(ScreenDensity.getDefaultInputDensity());
+            new Vector<ScreenDensity>(Configuration.getSettings().getSupportedScreenDensity()));
+    inputDensityChoice.setSelectedItem(Configuration.getSettings().getDefaultInputDensity());
     inputDensityChoice.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent actionEvent) {
         JComboBox box = (JComboBox) actionEvent.getSource();
         ScreenDensity selectedDensity = (ScreenDensity) box.getSelectedItem();
-        ScreenDensity.setDefaultInputDensity(selectedDensity);
+        Configuration.getSettings().setDefaultInputDensity(selectedDensity);
         xhdpiButton.setText(String.format(Locale.getDefault(), Localization.get("xhdpi"),
                                           selectedDensity.getName()));
       }
@@ -141,7 +142,7 @@ public class MainWindow extends JFrame {
 
     JLabel outputLabel = new JLabel(Localization.get("output_density"));
     optionPanel.add(outputLabel);
-    for (final ScreenDensity density : ScreenDensity.getSupportedScreenDensity()) {
+    for (final ScreenDensity density : Configuration.getSettings().getSupportedScreenDensity()) {
       final JCheckBox box = new JCheckBox(density.getName());
       box.addActionListener(new ActionListener() {
         @Override
@@ -157,11 +158,11 @@ public class MainWindow extends JFrame {
 
     final JCheckBox keepDensity = new JCheckBox(Localization.get("keep_same_density_file"));
     keepDensity.setToolTipText(Localization.get("keep_same_density_file_tooltip"));
-    keepDensity.setSelected(ScreenDensity.shouldKeepSameDensityFile());
+    keepDensity.setSelected(Configuration.getSettings().shouldKeepSameDensityFile());
     keepDensity.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        ScreenDensity.setShouldKeepSameDensityFile(keepDensity.isSelected());
+        Configuration.getSettings().setShouldKeepSameDensityFile(keepDensity.isSelected());
       }
     });
 
@@ -172,7 +173,13 @@ public class MainWindow extends JFrame {
     saveButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        ScreenDensity.save(saveButton);
+        saveButton.setEnabled(false);
+        Configuration.getSettings().save(new Runnable() {
+          @Override
+          public void run() {
+            saveButton.setEnabled(true);
+          }
+        });
       }
     });
     saveButton.setToolTipText(Localization.get("save_tooltip"));
@@ -217,13 +224,14 @@ public class MainWindow extends JFrame {
 
             ScreenDensity selectedDensity = (ScreenDensity) inputDensityChoice.getSelectedItem();
             instructionLabel.setText(String.format(Locale.getDefault(), Localization.get("xhdpi"),
-                                                             selectedDensity.getName()));
+                                                   selectedDensity.getName()));
             layout.show(MainWindow.this.getContentPane(), "output");
             Operation operation = new Operation(input);
             MainWindow.this.resultTable.addOperation(operation);
 
             ImageScaler scaler = new ImageScaler(operation,
-                                                 ScreenDensity.getDefaultInputDensity()) {
+                                                 Configuration.getSettings()
+                                                     .getDefaultInputDensity()) {
               @Override
               protected void process(
                   java.util.List<Operation> chunks) {
