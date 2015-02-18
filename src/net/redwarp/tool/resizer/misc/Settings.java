@@ -39,9 +39,6 @@ import java.util.List;
 
 import javax.swing.*;
 
-/**
- * User: benoit.vermont@airtag.com Date: 16/02/15 Time: 16:09
- */
 public class Settings {
 
   private static final String KEY_DENSITIES = "densities";

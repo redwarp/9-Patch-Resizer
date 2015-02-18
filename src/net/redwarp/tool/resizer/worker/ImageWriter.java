@@ -30,9 +30,6 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.stream.FileImageOutputStream;
 
-/**
- * User: benoit.vermont@airtag.com Date: 28/10/14 Time: 19:24
- */
 public class ImageWriter {
 
   public static void write(BufferedImage outputImage, Output output, File outputFile)

@@ -16,11 +16,6 @@
 
 package net.redwarp.tool.resizer.worker;
 
-/**
- * User: benoit.vermont@airtag.com
- * Date: 28/10/14
- * Time: 18:55
- */
 public enum Output {
     PNG("png"), JPG("jpg");
 

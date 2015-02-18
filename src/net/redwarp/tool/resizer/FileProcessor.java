@@ -20,58 +20,58 @@ import net.redwarp.tool.resizer.misc.NameValidator;
 import net.redwarp.tool.resizer.table.Operation;
 import net.redwarp.tool.resizer.table.OperationStatus;
 import net.redwarp.tool.resizer.worker.ImageScaler;
-import net.redwarp.tool.resizer.worker.ScreenDensity;
 
 import java.io.File;
 
 public class FileProcessor {
 
-    public interface FileProcessorStatusListener {
-        void onSuccess();
+  public interface FileProcessorStatusListener {
 
-        void onFailure(String msg);
-    }
+    void onSuccess();
 
-    private ImageScaler scaler;
-    FileProcessorStatusListener listener;
-    String fileName;
+    void onFailure(String msg);
+  }
 
-    public FileProcessor(String name, FileProcessorStatusListener l) {
-        fileName = name;
-        listener = l;
-        if (NameValidator.isFilenameValid(fileName)) {
-            Operation operation = new Operation(new File(name));
+  private ImageScaler scaler;
+  FileProcessorStatusListener listener;
+  String fileName;
 
-            scaler = new ImageScaler(operation,
-                    Configuration.getSettings().getDefaultInputDensity()) {
-                @Override
-                protected void process(java.util.List<Operation> chunks) {
-                    for (Operation operation : chunks) {
-                        OperationStatus status = operation.getStatus();
-                        if (status == OperationStatus.FINISH) {
-                            if (listener != null) {
-                                listener.onSuccess();
-                            }
-                        } else if (status == OperationStatus.ERROR) {
-                            if (listener != null) {
-                                listener.onFailure(operation.getMessage());
-                            }
-                        }
-                    }
-                }
-            };
-        }
-    }
+  public FileProcessor(String name, FileProcessorStatusListener l) {
+    fileName = name;
+    listener = l;
+    if (NameValidator.isFilenameValid(fileName)) {
+      Operation operation = new Operation(new File(name));
 
-    public void process() {
-        if (scaler != null) {
-            scaler.post();
-        } else {
-            if (listener != null) {
-                listener.onFailure("processor for argument:" + fileName
-                        + " is null");
+      scaler = new ImageScaler(operation,
+                               Configuration.getSettings().getDefaultInputDensity()) {
+        @Override
+        protected void process(java.util.List<Operation> chunks) {
+          for (Operation operation : chunks) {
+            OperationStatus status = operation.getStatus();
+            if (status == OperationStatus.FINISH) {
+              if (listener != null) {
+                listener.onSuccess();
+              }
+            } else if (status == OperationStatus.ERROR) {
+              if (listener != null) {
+                listener.onFailure(operation.getMessage());
+              }
             }
+          }
         }
+      };
     }
+  }
+
+  public void process() {
+    if (scaler != null) {
+      scaler.post();
+    } else {
+      if (listener != null) {
+        listener.onFailure("processor for argument:" + fileName
+                           + " is null");
+      }
+    }
+  }
 
 }
