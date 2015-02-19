@@ -20,12 +20,12 @@
     <artifactId>resizer</artifactId>
 
 
-    <version>1.3.3</version>
+    <version>1.4.0</version>
     <name>9Patch Resizer</name>
 
     <properties>
         <resizer.versionName>${project.version}</resizer.versionName>
-        <resizer.versionCode>1</resizer.versionCode>
+        <resizer.versionCode>2</resizer.versionCode>
     </properties>
 
     <dependencies>

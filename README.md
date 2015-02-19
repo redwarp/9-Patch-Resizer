@@ -20,7 +20,7 @@ As simple as drag and drop can get.
 
 And here is the [changelog](https://github.com/redwarp/9-Patch-Resizer/wiki/Changelog)
 
-Current version : *1.3.3*
+Current version : *1.4.0*
 
 You're using 9patch resizer for your apps ? Don't hesitate and leave me a message!
 
@@ -34,7 +34,7 @@ You're using 9patch resizer for your apps ? Don't hesitate and leave me a messag
 - [x] Command line support
 - [ ] A few optimisations
 - [x] Options to set the input density (if people wan't to downsize from hdpi and not from xdpi for instance)
-- [ ] Proper JPG support
+- [x] Proper JPG support
 
 ## Contributors
 
