@@ -161,8 +161,16 @@
                                     </classPath>
                                     <jre>
                                         <minVersion>1.6.0</minVersion>
+                                        <maxVersion/>
+                                        <jdkPreference>preferJre</jdkPreference>
+                                        <runtimeBits>64/32</runtimeBits>
                                     </jre>
                                     <icon>extra/icon_512.ico</icon>
+                                    <priority>normal</priority>
+                                    <singleInstance>
+                                        <mutexName>resizer</mutexName>
+                                        <windowTitle></windowTitle>
+                                    </singleInstance>
                                     <versionInfo>
                                         <fileVersion>${project.version}.0</fileVersion>
                                         <txtFileVersion>${project.version}</txtFileVersion>
