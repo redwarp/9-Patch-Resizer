@@ -112,7 +112,7 @@ public class Settings {
     JsonElement densities = gson.toJsonTree(list, listOfDensityType);
     rootObject.add(KEY_DENSITIES, densities);
     rootObject.addProperty(KEY_KEEP_SAME_DENSITY_FILE, keepSameDensityFile);
-    rootObject.addProperty("versionCode", Configuration.getVersionCode());
+    rootObject.addProperty(KEY_VERSION_CODE, Configuration.getVersionCode());
 
     SaveWorker worker = new SaveWorker(postAction, gson.toJson(rootObject));
     worker.execute();
