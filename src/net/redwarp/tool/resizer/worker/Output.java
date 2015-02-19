@@ -13,8 +13,19 @@
  *
  * Copyright 2013-2015 Redwarp
  */
-package net.redwarp.tool.resizer.table;
 
-public enum OperationStatus {
-    PENDING, IN_PROGRESS, FINISH, ERROR
+package net.redwarp.tool.resizer.worker;
+
+public enum Output {
+    PNG("png"), JPG("jpg");
+
+    private String format;
+
+    Output(String format) {
+        this.format = format;
+    }
+
+    public String getFormat() {
+        return format;
+    }
 }

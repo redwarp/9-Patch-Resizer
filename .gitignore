@@ -11,4 +11,5 @@
 /antbin
 /launch4j.log
 target
-.idea/workspace.xml
+.idea/
+densities.json

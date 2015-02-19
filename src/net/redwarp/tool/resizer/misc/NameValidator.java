@@ -13,8 +13,17 @@
  *
  * Copyright 2013-2015 Redwarp
  */
-package net.redwarp.tool.resizer.table;
 
-public enum OperationStatus {
-    PENDING, IN_PROGRESS, FINISH, ERROR
+package net.redwarp.tool.resizer.misc;
+
+/**
+ * User: benoit.vermont@airtag.com
+ * Date: 28/10/14
+ * Time: 19:09
+ */
+public class NameValidator {
+    public static boolean isFilenameValid(String filename) {
+        String lowerCaseName = filename.toLowerCase();
+        return (lowerCaseName.endsWith(".png") || lowerCaseName.endsWith(".jpg") || lowerCaseName.endsWith(".jpeg"));
+    }
 }

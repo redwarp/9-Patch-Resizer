@@ -11,18 +11,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Copyright 2013 Redwarp
+ * Copyright 2013-2015 Redwarp
  */
 package net.redwarp.tool.resizer.misc;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class Preferences {
-    private static ResourceBundle bundle = ResourceBundle.getBundle(
-            "misc.preferences", Locale.FRANCE);
+public class Configuration {
 
-    public static String getVersion() {
-        return bundle.getString("version");
+  private static ResourceBundle bundle = ResourceBundle.getBundle(
+      "misc.configuration", Locale.FRANCE);
+  private static Settings settings = null;
+
+  public static String getVersion() {
+    return bundle.getString("versionName");
+  }
+
+  public static int getVersionCode() {
+    return Integer.valueOf(bundle.getString("versionCode"));
+  }
+
+  public static Settings getSettings() {
+    if (settings == null) {
+      settings = new Settings();
     }
+    return settings;
+  }
 }

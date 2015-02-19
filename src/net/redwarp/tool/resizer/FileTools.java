@@ -11,11 +11,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Copyright 2013 Redwarp
+ * Copyright 2013-2015 Redwarp
  */
 package net.redwarp.tool.resizer;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class FileTools {
     public static void copyfile(File input, File output) {

@@ -2,6 +2,8 @@
 
 A resizer tool to automaticaly resize png files and 9 patches in several densities (previously hosted on https://code.google.com/p/9patch-resizer/)
 
+[![Build Status](https://travis-ci.org/redwarp/9-Patch-Resizer.svg?branch=develop)](https://travis-ci.org/redwarp/9-Patch-Resizer)
+
 ## Download
 
 To get the latest build (.jar or .exe file), check the release page on the github project: https://github.com/redwarp/9-Patch-Resizer/releases
@@ -18,7 +20,7 @@ As simple as drag and drop can get.
 
 And here is the [changelog](https://github.com/redwarp/9-Patch-Resizer/wiki/Changelog)
 
-Current version : *1.3.2*
+Current version : *1.4.0*
 
 You're using 9patch resizer for your apps ? Don't hesitate and leave me a message!
 
@@ -29,9 +31,21 @@ You're using 9patch resizer for your apps ? Don't hesitate and leave me a messag
 
 ## Roadmap
 
-- [ ] Command line support
+- [x] Command line support
 - [ ] A few optimisations
 - [x] Options to set the input density (if people wan't to downsize from hdpi and not from xdpi for instance)
+- [x] Proper JPG support
+
+## Contributors
+
+ * redwarp
+ * Jean-Baptiste LAB - Made the app working in command line
+
+Join us, and together, we can rule the galaxy as coders and...
+
+## Notable forks
+
+ * Soymonitus did a fork that also handles iOS resources, might come in handy for some people: https://github.com/soymonitus/9-Patch-Resizer
 
 ## Anyway...
 

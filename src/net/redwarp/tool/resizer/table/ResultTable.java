@@ -11,12 +11,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Copyright 2013 Redwarp
+ * Copyright 2013-2015 Redwarp
  */
 package net.redwarp.tool.resizer.table;
 
-import javax.swing.*;
 import java.awt.*;
+
+import javax.swing.*;
 
 public class ResultTable extends JTable {
     private static final long serialVersionUID = -8240707430938246389L;

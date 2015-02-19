@@ -11,16 +11,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Copyright 2013 Redwarp
+ * Copyright 2013-2015 Redwarp
  */
 package net.redwarp.tool.resizer.views;
 
+import net.redwarp.tool.resizer.misc.Configuration;
 import net.redwarp.tool.resizer.misc.Localization;
-import net.redwarp.tool.resizer.misc.Preferences;
+
+import java.awt.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 
 public class AboutDialog extends JDialog {
     private static final long serialVersionUID = 7783865044667012251L;
@@ -31,7 +32,7 @@ public class AboutDialog extends JDialog {
         this.getContentPane().setLayout(new BorderLayout(0, 0));
 
         JLabel lblResizer = new JLabel(Localization.get("app_name") + " "
-                + Preferences.getVersion());
+                + Configuration.getVersion());
         lblResizer.setBorder(new EmptyBorder(10, 10, 10, 10));
         lblResizer.setVerticalTextPosition(SwingConstants.BOTTOM);
         lblResizer.setIconTextGap(10);
