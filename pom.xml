@@ -38,7 +38,6 @@
     </dependencies>
 
     <build>
-
         <sourceDirectory>src</sourceDirectory>
         <resources>
             <resource>
@@ -141,7 +140,7 @@
                                     <priority>normal</priority>
                                     <singleInstance>
                                         <mutexName>resizer</mutexName>
-                                        <windowTitle></windowTitle>
+                                        <windowTitle/>
                                     </singleInstance>
                                     <versionInfo>
                                         <fileVersion>${project.version}.0</fileVersion>
