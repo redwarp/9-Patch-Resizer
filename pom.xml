@@ -76,33 +76,10 @@
                     <archive>
                         <manifest>
                             <mainClass>net.redwarp.tool.resizer.Main</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                     </archive>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2-beta-5</version>
-                <executions>
-                    <execution>
-                        <id>create-the-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                            <archive>
-                                <manifest>
-                                    <mainClass>net.redwarp.tool.resizer.Main</mainClass>
-                                </manifest>
-                            </archive>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>com.github.wvengen</groupId>
@@ -117,15 +94,10 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <injar>${project.build.finalName}-jar-with-dependencies.jar</injar>
+                    <injar>${project.build.finalName}.jar</injar>
                     <outjar>${project.build.finalName}-proguard.jar</outjar>
                     <proguardInclude>proguard.txt</proguardInclude>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>com.google.code.gson</groupId>
-                            <artifactId>gson</artifactId>
-                        </exclusion>
-                    </exclusions>
+                    <includeDependencyInjar>true</includeDependencyInjar>
                     <libs>
                         <lib>${java.home}/lib/rt.jar</lib>
                     </libs>
