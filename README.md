@@ -2,6 +2,8 @@
 
 A resizer tool to automaticaly resize png files and 9 patches in several densities (previously hosted on https://code.google.com/p/9patch-resizer/)
 
+[![Build Status](https://travis-ci.org/redwarp/9-Patch-Resizer.svg?branch=develop)](https://travis-ci.org/redwarp/9-Patch-Resizer)
+
 ## Download
 
 To get the latest build (.jar or .exe file), check the release page on the github project: https://github.com/redwarp/9-Patch-Resizer/releases
@@ -33,7 +35,7 @@ You're using 9patch resizer for your apps ? Don't hesitate and leave me a messag
 - [ ] A few optimisations
 - [x] Options to set the input density (if people wan't to downsize from hdpi and not from xdpi for instance)
 - [ ] Proper JPG support
- 
+
 ## Contributors
 
  * redwarp
