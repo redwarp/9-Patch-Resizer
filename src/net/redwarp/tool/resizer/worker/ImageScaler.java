@@ -56,7 +56,11 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
     try {
       BufferedImage inputImage;
       synchronized (fileLock) {
-        inputImage = ImageIO.read(this.inputFile);
+//        inputImage = ImageIO.read(this.inputFile);
+          Image tempImage = Toolkit.getDefaultToolkit().createImage(this.inputFile.getAbsolutePath());
+          ImageIcon tempIcon = new ImageIcon(tempImage);
+          inputImage = new BufferedImage(tempIcon.getIconWidth(), tempIcon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
+          inputImage.getGraphics().drawImage(tempImage, 0, 0, null);
       }
       if (inputImage == null) {
         this.operation.setStatus(OperationStatus.ERROR,
@@ -186,7 +190,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
       // }
       this.operation.setStatus(OperationStatus.FINISH);
       this.publish(this.operation);
-    } catch (IOException e) {
+    } catch (Exception e) {
       this.operation.setStatus(OperationStatus.ERROR);
       this.publish(this.operation);
     }
