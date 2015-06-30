@@ -140,6 +140,19 @@ public class MainWindow extends JFrame {
     this.instructionLabel = new JLabel("");
     this.instructionLabel.setIcon(this.blueArrowSmall);
     this.instructionLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
+    this.instructionLabel.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        int returnVal = fileChooser.showOpenDialog(MainWindow.this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+          File[] files = fileChooser.getSelectedFiles();
+
+          createScaleJobs(files);
+        }
+      }
+    });
+
     outputPanel.add(this.instructionLabel, BorderLayout.SOUTH);
 
     new FileDrop<Container>(textArea, null, dropListener);
@@ -175,15 +188,12 @@ public class MainWindow extends JFrame {
         new MouseAdapter() {
           @Override
           public void mouseClicked(MouseEvent e) {
-            System.out.println("Clicked");
             int returnVal = fileChooser.showOpenDialog(MainWindow.this);
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
               File[] files = fileChooser.getSelectedFiles();
 
               createScaleJobs(files);
-            } else {
-              System.out.println("Attachment cancelled by user.");
             }
           }
         });
