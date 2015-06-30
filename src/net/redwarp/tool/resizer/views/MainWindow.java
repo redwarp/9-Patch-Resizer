@@ -28,6 +28,8 @@ import net.redwarp.tool.resizer.worker.ScreenDensity;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +58,7 @@ public class MainWindow extends JFrame {
   private JMenuItem mntmClear;
   private JMenuItem mntmAbout;
   private final Action action = new SwingAction();
+  private final JComboBox<ScreenDensity> inputDensityChoice;
 
   public MainWindow() {
     this.setSize(new Dimension(550, 400));
@@ -111,6 +114,31 @@ public class MainWindow extends JFrame {
     this.xhdpiButton.setContentAreaFilled(false);
     this.inputPanel.add(this.xhdpiButton, BorderLayout.CENTER);
 
+    final JFileChooser fileChooser = new JFileChooser() {
+      @Override
+      public boolean accept(File f) {
+        return NameValidator.isFilenameValid(f.getName());
+      }
+    };
+    fileChooser.setMultiSelectionEnabled(true);
+
+    this.xhdpiButton.addMouseListener(
+        new MouseAdapter() {
+          @Override
+          public void mouseClicked(MouseEvent e) {
+            System.out.println("Clicked");
+            int returnVal = fileChooser.showOpenDialog(MainWindow.this);
+
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+              File[] files = fileChooser.getSelectedFiles();
+
+              createScaleJobs(files);
+            } else {
+              System.out.println("Attachment cancelled by user.");
+            }
+          }
+        });
+
     JPanel optionPanel = new JPanel();
     optionPanel.setLayout(new BoxLayout(optionPanel, BoxLayout.PAGE_AXIS));
     optionPanel.add(Box.createVerticalGlue());
@@ -118,10 +146,8 @@ public class MainWindow extends JFrame {
     JLabel inputLabel = new JLabel(Localization.get("input_density"));
     inputLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     optionPanel.add(inputLabel);
-    final JComboBox<ScreenDensity>
-        inputDensityChoice =
-        new JComboBox<ScreenDensity>(
-            new Vector<ScreenDensity>(Configuration.getSettings().getSupportedScreenDensity()));
+    inputDensityChoice = new JComboBox<ScreenDensity>(
+        new Vector<ScreenDensity>(Configuration.getSettings().getSupportedScreenDensity()));
     inputDensityChoice.setSelectedItem(Configuration.getSettings().getDefaultInputDensity());
     inputDensityChoice.addActionListener(new ActionListener() {
       @Override
@@ -215,35 +241,7 @@ public class MainWindow extends JFrame {
 
       @Override
       public void filesDropped(Container source, File[] files) {
-        for (File input : files) {
-          String filename = input.getName();
-          if (NameValidator.isFilenameValid(filename)) {
-            MainWindow.this.mntmClear.setEnabled(true);
-            CardLayout layout = (CardLayout) MainWindow.this
-                .getContentPane().getLayout();
-
-            ScreenDensity selectedDensity = (ScreenDensity) inputDensityChoice.getSelectedItem();
-            instructionLabel.setText(String.format(Locale.getDefault(), Localization.get("xhdpi"),
-                                                   selectedDensity.getName()));
-            layout.show(MainWindow.this.getContentPane(), "output");
-            Operation operation = new Operation(input);
-            MainWindow.this.resultTable.addOperation(operation);
-
-            ImageScaler scaler = new ImageScaler(operation,
-                                                 Configuration.getSettings()
-                                                     .getDefaultInputDensity()) {
-              @Override
-              protected void process(
-                  java.util.List<Operation> chunks) {
-                for (Operation operation : chunks) {
-                  MainWindow.this.resultTable
-                      .notifyChange(operation);
-                }
-              }
-            };
-            scaler.post();
-          }
-        }
+        createScaleJobs(files);
       }
 
       @Override
@@ -271,6 +269,38 @@ public class MainWindow extends JFrame {
     new FileDrop<Container>(this.textArea, null, dropListener);
 
     this.setMenuBar();
+  }
+
+  private void createScaleJobs(File[] files) {
+    for (File input : files) {
+      String filename = input.getName();
+      if (NameValidator.isFilenameValid(filename)) {
+        MainWindow.this.mntmClear.setEnabled(true);
+        CardLayout layout = (CardLayout) MainWindow.this
+            .getContentPane().getLayout();
+
+        ScreenDensity selectedDensity = (ScreenDensity) inputDensityChoice.getSelectedItem();
+        instructionLabel.setText(String.format(Locale.getDefault(), Localization.get("xhdpi"),
+                                               selectedDensity.getName()));
+        layout.show(MainWindow.this.getContentPane(), "output");
+        Operation operation = new Operation(input);
+        MainWindow.this.resultTable.addOperation(operation);
+
+        ImageScaler scaler = new ImageScaler(operation,
+                                             Configuration.getSettings()
+                                                 .getDefaultInputDensity()) {
+          @Override
+          protected void process(
+              List<Operation> chunks) {
+            for (Operation operation : chunks) {
+              MainWindow.this.resultTable
+                  .notifyChange(operation);
+            }
+          }
+        };
+        scaler.post();
+      }
+    }
   }
 
   private void setMenuBar() {
