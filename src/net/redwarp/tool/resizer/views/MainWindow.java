@@ -42,23 +42,15 @@ import javax.swing.border.EmptyBorder;
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
 
-  private JPanel inputPanel;
-  private JPanel outputPanel;
-
   private ImageIcon blueArrow, redArrow;
   private ImageIcon blueArrowSmall, redArrowSmall;
   private JButton xhdpiButton;
-  private JScrollPane scrollPane;
-  private JTextArea textArea;
   private ResultTable resultTable;
   private JLabel instructionLabel;
-  private JMenuBar menuBar;
-  private JMenu mnHelp;
-  private JMenu mnEdit;
   private JMenuItem mntmClear;
-  private JMenuItem mntmAbout;
   private final Action action = new SwingAction();
-  private final JComboBox<ScreenDensity> inputDensityChoice;
+  private JComboBox<ScreenDensity> inputDensityChoice;
+  private JFileChooser fileChooser;
 
   public MainWindow() {
     this.setSize(new Dimension(550, 400));
@@ -90,9 +82,73 @@ public class MainWindow extends JFrame {
         MainWindow.class.getResource("/img/red_small.png"));
     this.getContentPane().setLayout(new CardLayout(0, 0));
 
-    this.inputPanel = new JPanel();
-    this.inputPanel.setPreferredSize(new Dimension(10, 140));
-    this.getContentPane().add(this.inputPanel, "input");
+
+    fileChooser = new JFileChooser() {
+      @Override
+      public boolean accept(File f) {
+        return NameValidator.isFilenameValid(f.getName());
+      }
+    };
+    fileChooser.setMultiSelectionEnabled(true);
+
+    this.getContentPane().add(createInputPanel(), "input");
+    this.getContentPane().add(createOutputPanel(), "output");
+
+    this.setMenuBar();
+  }
+
+  private JPanel createOutputPanel() {
+    JPanel outputPanel = new JPanel();
+    outputPanel.setLayout(new BorderLayout(0, 0));
+
+    JTextArea textArea = new JTextArea();
+    textArea.setLineWrap(true);
+    textArea.setEditable(false);
+
+    this.resultTable = new ResultTable();
+    JScrollPane scrollPane = new JScrollPane(this.resultTable);
+    scrollPane
+        .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    scrollPane
+        .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+    outputPanel.add(scrollPane, BorderLayout.CENTER);
+
+    FileDrop.Listener<Container> dropListener = new FileDrop.Listener<Container>() {
+
+      @Override
+      public void filesDropped(Container source, File[] files) {
+        createScaleJobs(files);
+      }
+
+      @Override
+      public void dragEnter(Container source) {
+        MainWindow.this.xhdpiButton.setSelected(true);
+        MainWindow.this.instructionLabel
+            .setIcon(MainWindow.this.redArrowSmall);
+      }
+
+      @Override
+      public void dragExit(Container source) {
+        MainWindow.this.xhdpiButton.setSelected(false);
+        MainWindow.this.instructionLabel
+            .setIcon(MainWindow.this.blueArrowSmall);
+      }
+    };
+    new FileDrop<Container>(this.getContentPane(), null, dropListener);
+    new FileDrop<Container>(outputPanel, null, dropListener);
+
+    this.instructionLabel = new JLabel("");
+    this.instructionLabel.setIcon(this.blueArrowSmall);
+    this.instructionLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
+    outputPanel.add(this.instructionLabel, BorderLayout.SOUTH);
+
+    new FileDrop<Container>(textArea, null, dropListener);
+    return outputPanel;
+  }
+
+  private JPanel createInputPanel() {
+    JPanel inputPanel = new JPanel();
+    inputPanel.setPreferredSize(new Dimension(10, 140));
 
     this.xhdpiButton =
         new JButton(String.format(Locale.getDefault(), Localization.get("xhdpi"),
@@ -102,7 +158,7 @@ public class MainWindow extends JFrame {
       public void actionPerformed(ActionEvent arg0) {
       }
     });
-    this.inputPanel.setLayout(new BorderLayout(0, 0));
+    inputPanel.setLayout(new BorderLayout(0, 0));
     this.xhdpiButton.setBorderPainted(false);
     this.xhdpiButton.setFocusPainted(false);
     this.xhdpiButton.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -112,15 +168,8 @@ public class MainWindow extends JFrame {
     this.xhdpiButton.setSelectedIcon(this.redArrow);
     this.xhdpiButton.setBorder(null);
     this.xhdpiButton.setContentAreaFilled(false);
-    this.inputPanel.add(this.xhdpiButton, BorderLayout.CENTER);
+    inputPanel.add(this.xhdpiButton, BorderLayout.CENTER);
 
-    final JFileChooser fileChooser = new JFileChooser() {
-      @Override
-      public boolean accept(File f) {
-        return NameValidator.isFilenameValid(f.getName());
-      }
-    };
-    fileChooser.setMultiSelectionEnabled(true);
 
     this.xhdpiButton.addMouseListener(
         new MouseAdapter() {
@@ -219,56 +268,8 @@ public class MainWindow extends JFrame {
 
     optionPanel.setPreferredSize(new Dimension(200, -1));
 
-    this.inputPanel.add(optionPanel, BorderLayout.LINE_START);
-
-    this.outputPanel = new JPanel();
-    this.getContentPane().add(this.outputPanel, "output");
-    this.outputPanel.setLayout(new BorderLayout(0, 0));
-
-    this.textArea = new JTextArea();
-    this.textArea.setLineWrap(true);
-    this.textArea.setEditable(false);
-
-    this.resultTable = new ResultTable();
-    this.scrollPane = new JScrollPane(this.resultTable);
-    this.scrollPane
-        .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    this.scrollPane
-        .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-    this.outputPanel.add(this.scrollPane, BorderLayout.CENTER);
-
-    FileDrop.Listener<Container> dropListener = new FileDrop.Listener<Container>() {
-
-      @Override
-      public void filesDropped(Container source, File[] files) {
-        createScaleJobs(files);
-      }
-
-      @Override
-      public void dragEnter(Container source) {
-        MainWindow.this.xhdpiButton.setSelected(true);
-        MainWindow.this.instructionLabel
-            .setIcon(MainWindow.this.redArrowSmall);
-      }
-
-      @Override
-      public void dragExit(Container source) {
-        MainWindow.this.xhdpiButton.setSelected(false);
-        MainWindow.this.instructionLabel
-            .setIcon(MainWindow.this.blueArrowSmall);
-      }
-    };
-    new FileDrop<Container>(this.getContentPane(), null, dropListener);
-    new FileDrop<Container>(this.outputPanel, null, dropListener);
-
-    this.instructionLabel = new JLabel("");
-    this.instructionLabel.setIcon(this.blueArrowSmall);
-    this.instructionLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
-    this.outputPanel.add(this.instructionLabel, BorderLayout.SOUTH);
-
-    new FileDrop<Container>(this.textArea, null, dropListener);
-
-    this.setMenuBar();
+    inputPanel.add(optionPanel, BorderLayout.LINE_START);
+    return inputPanel;
   }
 
   private void createScaleJobs(File[] files) {
@@ -304,23 +305,23 @@ public class MainWindow extends JFrame {
   }
 
   private void setMenuBar() {
-    this.menuBar = new JMenuBar();
-    this.setJMenuBar(this.menuBar);
+    JMenuBar menuBar = new JMenuBar();
+    this.setJMenuBar(menuBar);
 
-    this.mnEdit = new JMenu(Localization.get("menu_edit"));
-    this.menuBar.add(this.mnEdit);
+    JMenu mnEdit = new JMenu(Localization.get("menu_edit"));
+    menuBar.add(mnEdit);
 
     this.mntmClear = new JMenuItem(Localization.get("menu_item_clear"));
     this.mntmClear.setAction(this.action);
     this.mntmClear.setEnabled(false);
-    this.mnEdit.add(this.mntmClear);
+    mnEdit.add(this.mntmClear);
 
-    this.mnHelp = new JMenu(Localization.get("menu_help"));
-    this.menuBar.add(this.mnHelp);
+    JMenu mnHelp = new JMenu(Localization.get("menu_help"));
+    menuBar.add(mnHelp);
 
-    this.mntmAbout = new JMenuItem();
-    this.mntmAbout.setAction(new AboutAction());
-    this.mnHelp.add(this.mntmAbout);
+    JMenuItem mntmAbout = new JMenuItem();
+    mntmAbout.setAction(new AboutAction());
+    mnHelp.add(mntmAbout);
   }
 
   private class AboutAction extends AbstractAction {
