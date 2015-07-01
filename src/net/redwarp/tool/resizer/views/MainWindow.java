@@ -31,6 +31,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -38,6 +39,7 @@ import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
 
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
@@ -50,7 +52,8 @@ public class MainWindow extends JFrame {
   private JMenuItem mntmClear;
   private final Action action = new SwingAction();
   private JComboBox<ScreenDensity> inputDensityChoice;
-  private JFileChooser fileChooser;
+  //  private JFileChooser fileChooser;
+  private FileDialog fileDialog;
 
   public MainWindow() {
     this.setSize(new Dimension(550, 400));
@@ -82,14 +85,15 @@ public class MainWindow extends JFrame {
         MainWindow.class.getResource("/img/red_small.png"));
     this.getContentPane().setLayout(new CardLayout(0, 0));
 
-
-    fileChooser = new JFileChooser() {
+    fileDialog = new FileDialog(this);
+    fileDialog.setFilenameFilter(new FilenameFilter() {
       @Override
-      public boolean accept(File f) {
-        return NameValidator.isFilenameValid(f.getName());
+      public boolean accept(File dir, String name) {
+        return NameValidator.isFilenameValid(name);
       }
-    };
-    fileChooser.setMultiSelectionEnabled(true);
+    });
+    fileDialog.setMultipleMode(true);
+    fileDialog.setTitle(Localization.get("image_types"));
 
     this.getContentPane().add(createInputPanel(), "input");
     this.getContentPane().add(createOutputPanel(), "output");
@@ -143,13 +147,7 @@ public class MainWindow extends JFrame {
     this.instructionLabel.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseClicked(MouseEvent e) {
-        int returnVal = fileChooser.showOpenDialog(MainWindow.this);
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-          File[] files = fileChooser.getSelectedFiles();
-
-          createScaleJobs(files);
-        }
+        displayImagePicker();
       }
     });
 
@@ -157,6 +155,14 @@ public class MainWindow extends JFrame {
 
     new FileDrop<Container>(textArea, null, dropListener);
     return outputPanel;
+  }
+
+  private void displayImagePicker() {
+    fileDialog.setVisible(true);
+    File[] files = fileDialog.getFiles();
+    if (files != null) {
+      createScaleJobs(files);
+    }
   }
 
   private JPanel createInputPanel() {
@@ -183,18 +189,11 @@ public class MainWindow extends JFrame {
     this.xhdpiButton.setContentAreaFilled(false);
     inputPanel.add(this.xhdpiButton, BorderLayout.CENTER);
 
-
     this.xhdpiButton.addMouseListener(
         new MouseAdapter() {
           @Override
           public void mouseClicked(MouseEvent e) {
-            int returnVal = fileChooser.showOpenDialog(MainWindow.this);
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
-              File[] files = fileChooser.getSelectedFiles();
-
-              createScaleJobs(files);
-            }
+            displayImagePicker();
           }
         });
 
