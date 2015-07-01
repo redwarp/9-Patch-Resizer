@@ -28,7 +28,10 @@ import net.redwarp.tool.resizer.worker.ScreenDensity;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -37,25 +40,20 @@ import java.util.Vector;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+
 @SuppressWarnings("serial")
 public class MainWindow extends JFrame {
-
-  private JPanel inputPanel;
-  private JPanel outputPanel;
 
   private ImageIcon blueArrow, redArrow;
   private ImageIcon blueArrowSmall, redArrowSmall;
   private JButton xhdpiButton;
-  private JScrollPane scrollPane;
-  private JTextArea textArea;
   private ResultTable resultTable;
   private JLabel instructionLabel;
-  private JMenuBar menuBar;
-  private JMenu mnHelp;
-  private JMenu mnEdit;
   private JMenuItem mntmClear;
-  private JMenuItem mntmAbout;
   private final Action action = new SwingAction();
+  private JComboBox<ScreenDensity> inputDensityChoice;
+  //  private JFileChooser fileChooser;
+  private FileDialog fileDialog;
 
   public MainWindow() {
     this.setSize(new Dimension(550, 400));
@@ -87,9 +85,89 @@ public class MainWindow extends JFrame {
         MainWindow.class.getResource("/img/red_small.png"));
     this.getContentPane().setLayout(new CardLayout(0, 0));
 
-    this.inputPanel = new JPanel();
-    this.inputPanel.setPreferredSize(new Dimension(10, 140));
-    this.getContentPane().add(this.inputPanel, "input");
+    fileDialog = new FileDialog(this);
+    fileDialog.setFilenameFilter(new FilenameFilter() {
+      @Override
+      public boolean accept(File dir, String name) {
+        return NameValidator.isFilenameValid(name);
+      }
+    });
+    fileDialog.setMultipleMode(true);
+    fileDialog.setTitle(Localization.get("image_types"));
+
+    this.getContentPane().add(createInputPanel(), "input");
+    this.getContentPane().add(createOutputPanel(), "output");
+
+    this.setMenuBar();
+  }
+
+  private JPanel createOutputPanel() {
+    JPanel outputPanel = new JPanel();
+    outputPanel.setLayout(new BorderLayout(0, 0));
+
+    JTextArea textArea = new JTextArea();
+    textArea.setLineWrap(true);
+    textArea.setEditable(false);
+
+    this.resultTable = new ResultTable();
+    JScrollPane scrollPane = new JScrollPane(this.resultTable);
+    scrollPane
+        .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+    scrollPane
+        .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+    outputPanel.add(scrollPane, BorderLayout.CENTER);
+
+    FileDrop.Listener<Container> dropListener = new FileDrop.Listener<Container>() {
+
+      @Override
+      public void filesDropped(Container source, File[] files) {
+        createScaleJobs(files);
+      }
+
+      @Override
+      public void dragEnter(Container source) {
+        MainWindow.this.xhdpiButton.setSelected(true);
+        MainWindow.this.instructionLabel
+            .setIcon(MainWindow.this.redArrowSmall);
+      }
+
+      @Override
+      public void dragExit(Container source) {
+        MainWindow.this.xhdpiButton.setSelected(false);
+        MainWindow.this.instructionLabel
+            .setIcon(MainWindow.this.blueArrowSmall);
+      }
+    };
+    new FileDrop<Container>(this.getContentPane(), null, dropListener);
+    new FileDrop<Container>(outputPanel, null, dropListener);
+
+    this.instructionLabel = new JLabel("");
+    this.instructionLabel.setIcon(this.blueArrowSmall);
+    this.instructionLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
+    this.instructionLabel.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        displayImagePicker();
+      }
+    });
+
+    outputPanel.add(this.instructionLabel, BorderLayout.SOUTH);
+
+    new FileDrop<Container>(textArea, null, dropListener);
+    return outputPanel;
+  }
+
+  private void displayImagePicker() {
+    fileDialog.setVisible(true);
+    File[] files = fileDialog.getFiles();
+    if (files != null) {
+      createScaleJobs(files);
+    }
+  }
+
+  private JPanel createInputPanel() {
+    JPanel inputPanel = new JPanel();
+    inputPanel.setPreferredSize(new Dimension(10, 140));
 
     this.xhdpiButton =
         new JButton(String.format(Locale.getDefault(), Localization.get("xhdpi"),
@@ -99,7 +177,7 @@ public class MainWindow extends JFrame {
       public void actionPerformed(ActionEvent arg0) {
       }
     });
-    this.inputPanel.setLayout(new BorderLayout(0, 0));
+    inputPanel.setLayout(new BorderLayout(0, 0));
     this.xhdpiButton.setBorderPainted(false);
     this.xhdpiButton.setFocusPainted(false);
     this.xhdpiButton.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -109,7 +187,15 @@ public class MainWindow extends JFrame {
     this.xhdpiButton.setSelectedIcon(this.redArrow);
     this.xhdpiButton.setBorder(null);
     this.xhdpiButton.setContentAreaFilled(false);
-    this.inputPanel.add(this.xhdpiButton, BorderLayout.CENTER);
+    inputPanel.add(this.xhdpiButton, BorderLayout.CENTER);
+
+    this.xhdpiButton.addMouseListener(
+        new MouseAdapter() {
+          @Override
+          public void mouseClicked(MouseEvent e) {
+            displayImagePicker();
+          }
+        });
 
     JPanel optionPanel = new JPanel();
     optionPanel.setLayout(new BoxLayout(optionPanel, BoxLayout.PAGE_AXIS));
@@ -118,10 +204,8 @@ public class MainWindow extends JFrame {
     JLabel inputLabel = new JLabel(Localization.get("input_density"));
     inputLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
     optionPanel.add(inputLabel);
-    final JComboBox<ScreenDensity>
-        inputDensityChoice =
-        new JComboBox<ScreenDensity>(
-            new Vector<ScreenDensity>(Configuration.getSettings().getSupportedScreenDensity()));
+    inputDensityChoice = new JComboBox<ScreenDensity>(
+        new Vector<ScreenDensity>(Configuration.getSettings().getSupportedScreenDensity()));
     inputDensityChoice.setSelectedItem(Configuration.getSettings().getDefaultInputDensity());
     inputDensityChoice.addActionListener(new ActionListener() {
       @Override
@@ -193,104 +277,60 @@ public class MainWindow extends JFrame {
 
     optionPanel.setPreferredSize(new Dimension(200, -1));
 
-    this.inputPanel.add(optionPanel, BorderLayout.LINE_START);
+    inputPanel.add(optionPanel, BorderLayout.LINE_START);
+    return inputPanel;
+  }
 
-    this.outputPanel = new JPanel();
-    this.getContentPane().add(this.outputPanel, "output");
-    this.outputPanel.setLayout(new BorderLayout(0, 0));
+  private void createScaleJobs(File[] files) {
+    for (File input : files) {
+      String filename = input.getName();
+      if (NameValidator.isFilenameValid(filename)) {
+        MainWindow.this.mntmClear.setEnabled(true);
+        CardLayout layout = (CardLayout) MainWindow.this
+            .getContentPane().getLayout();
 
-    this.textArea = new JTextArea();
-    this.textArea.setLineWrap(true);
-    this.textArea.setEditable(false);
+        ScreenDensity selectedDensity = (ScreenDensity) inputDensityChoice.getSelectedItem();
+        instructionLabel.setText(String.format(Locale.getDefault(), Localization.get("xhdpi"),
+                                               selectedDensity.getName()));
+        layout.show(MainWindow.this.getContentPane(), "output");
+        Operation operation = new Operation(input);
+        MainWindow.this.resultTable.addOperation(operation);
 
-    this.resultTable = new ResultTable();
-    this.scrollPane = new JScrollPane(this.resultTable);
-    this.scrollPane
-        .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-    this.scrollPane
-        .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-    this.outputPanel.add(this.scrollPane, BorderLayout.CENTER);
-
-    FileDrop.Listener<Container> dropListener = new FileDrop.Listener<Container>() {
-
-      @Override
-      public void filesDropped(Container source, File[] files) {
-        for (File input : files) {
-          String filename = input.getName();
-          if (NameValidator.isFilenameValid(filename)) {
-            MainWindow.this.mntmClear.setEnabled(true);
-            CardLayout layout = (CardLayout) MainWindow.this
-                .getContentPane().getLayout();
-
-            ScreenDensity selectedDensity = (ScreenDensity) inputDensityChoice.getSelectedItem();
-            instructionLabel.setText(String.format(Locale.getDefault(), Localization.get("xhdpi"),
-                                                   selectedDensity.getName()));
-            layout.show(MainWindow.this.getContentPane(), "output");
-            Operation operation = new Operation(input);
-            MainWindow.this.resultTable.addOperation(operation);
-
-            ImageScaler scaler = new ImageScaler(operation,
-                                                 Configuration.getSettings()
-                                                     .getDefaultInputDensity()) {
-              @Override
-              protected void process(
-                  java.util.List<Operation> chunks) {
-                for (Operation operation : chunks) {
-                  MainWindow.this.resultTable
-                      .notifyChange(operation);
-                }
-              }
-            };
-            scaler.post();
+        ImageScaler scaler = new ImageScaler(operation,
+                                             Configuration.getSettings()
+                                                 .getDefaultInputDensity()) {
+          @Override
+          protected void process(
+              List<Operation> chunks) {
+            for (Operation operation : chunks) {
+              MainWindow.this.resultTable
+                  .notifyChange(operation);
+            }
           }
-        }
+        };
+        scaler.post();
       }
-
-      @Override
-      public void dragEnter(Container source) {
-        MainWindow.this.xhdpiButton.setSelected(true);
-        MainWindow.this.instructionLabel
-            .setIcon(MainWindow.this.redArrowSmall);
-      }
-
-      @Override
-      public void dragExit(Container source) {
-        MainWindow.this.xhdpiButton.setSelected(false);
-        MainWindow.this.instructionLabel
-            .setIcon(MainWindow.this.blueArrowSmall);
-      }
-    };
-    new FileDrop<Container>(this.getContentPane(), null, dropListener);
-    new FileDrop<Container>(this.outputPanel, null, dropListener);
-
-    this.instructionLabel = new JLabel("");
-    this.instructionLabel.setIcon(this.blueArrowSmall);
-    this.instructionLabel.setBorder(new EmptyBorder(4, 4, 4, 4));
-    this.outputPanel.add(this.instructionLabel, BorderLayout.SOUTH);
-
-    new FileDrop<Container>(this.textArea, null, dropListener);
-
-    this.setMenuBar();
+    }
   }
 
   private void setMenuBar() {
-    this.menuBar = new JMenuBar();
-    this.setJMenuBar(this.menuBar);
+    JMenuBar menuBar = new JMenuBar();
+    this.setJMenuBar(menuBar);
 
-    this.mnEdit = new JMenu(Localization.get("menu_edit"));
-    this.menuBar.add(this.mnEdit);
+    JMenu mnEdit = new JMenu(Localization.get("menu_edit"));
+    menuBar.add(mnEdit);
 
     this.mntmClear = new JMenuItem(Localization.get("menu_item_clear"));
     this.mntmClear.setAction(this.action);
     this.mntmClear.setEnabled(false);
-    this.mnEdit.add(this.mntmClear);
+    mnEdit.add(this.mntmClear);
 
-    this.mnHelp = new JMenu(Localization.get("menu_help"));
-    this.menuBar.add(this.mnHelp);
+    JMenu mnHelp = new JMenu(Localization.get("menu_help"));
+    menuBar.add(mnHelp);
 
-    this.mntmAbout = new JMenuItem();
-    this.mntmAbout.setAction(new AboutAction());
-    this.mnHelp.add(this.mntmAbout);
+    JMenuItem mntmAbout = new JMenuItem();
+    mntmAbout.setAction(new AboutAction());
+    mnHelp.add(mntmAbout);
   }
 
   private class AboutAction extends AbstractAction {
