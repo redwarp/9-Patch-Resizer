@@ -20,7 +20,7 @@ As simple as drag and drop can get.
 
 And here is the [changelog](https://github.com/redwarp/9-Patch-Resizer/wiki/Changelog)
 
-Current version : *1.4.1*
+Current version : *1.4.2*
 
 You're using 9patch resizer for your apps ? Don't hesitate and leave me a message!
 
