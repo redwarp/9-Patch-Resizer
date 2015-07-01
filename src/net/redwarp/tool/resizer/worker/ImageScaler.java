@@ -138,11 +138,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
                     trimedImage = this.rescaleImage(trimedImage,
                             (int) (ratio * trimedImage.getWidth()),
                             (int) (ratio * trimedImage.getHeight()));
-                    if (ratio < 1) {
-                        UnsharpMaskFilter filter = new UnsharpMaskFilter((1 - ratio) / 2f, 2, 0);
-
-                        trimedImage = filter.filter(trimedImage, null);
-                    }
+                    trimedImage = sharpen(trimedImage, ratio);
 
                     BufferedImage borderImage;
 
@@ -172,11 +168,7 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
                     outputImage = this.rescaleImage(inputImage,
                             (int) (ratio * inputImage.getWidth()),
                             (int) (ratio * inputImage.getHeight()));
-                    if (ratio < 1) {
-                        UnsharpMaskFilter filter = new UnsharpMaskFilter((1 - ratio) / 2f, 2, 0);
-
-//            outputImage = filter.filter(outputImage, null);
-                    }
+                    outputImage = sharpen(outputImage, ratio);
                 }
 
                 try {
@@ -207,6 +199,15 @@ public class ImageScaler extends SwingWorker<Void, Operation> {
         }
 
         return null;
+    }
+
+    private BufferedImage sharpen(BufferedImage bufferedImage, float ratio) {
+        if (ratio < 1) {
+            UnsharpMaskFilter filter = new UnsharpMaskFilter((1 - ratio) / 2f, 2, 0);
+
+            bufferedImage = filter.filter(bufferedImage, null);
+        }
+        return bufferedImage;
     }
 
     public void post() {
