@@ -51,7 +51,3 @@ Join us, and together, we can rule the galaxy as coders and...
 ## Anyway...
 
 If for some weird reasons, some of your PNG files aren't resized properly, don't hesitate to send them to me, so that I can investigate !
-
-I hope it'll prove as useful to you as it is useful to me. If you like it, and have too much cash in you hands, don't hesitate to donate. I will probably use it on beers though, so you should probably not bother, if you care for my health.
-
-<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=UCXCHNNSUP8G4&lc=US&item_name=Elder%20Sign&item_number=Resizer&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"/></a>
