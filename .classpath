@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="res"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Maven: com.google.code.gson:gson:2.2.4"/>
-	<classpathentry kind="output" path="target/classes"/>
-</classpath>

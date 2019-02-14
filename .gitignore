@@ -15,3 +15,6 @@ target
 densities.json
 Resizer.eml
 resizer.iml
+.gradle
+out
+build
