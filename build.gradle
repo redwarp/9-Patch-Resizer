@@ -41,3 +41,16 @@ publishing {
         }
     }
 }
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'net.redwarp.tool.resizer.Main',
+                'Manifest-Version': "$version",
+                'Created-By': 'Redwarp'
+        )
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
