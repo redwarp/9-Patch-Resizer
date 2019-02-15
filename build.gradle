@@ -32,7 +32,8 @@ sourceSets {
 group = 'net.redwarp.tool'
 version = '1.4.2'
 description = '9Patch Resizer'
-sourceCompatibility = '1.6'
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
 publishing {
     publications {
