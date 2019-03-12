@@ -18,17 +18,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.4'
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src']
-        }
-        resources {
-            srcDirs = ['res']
-        }
-    }
-}
-
 group = 'net.redwarp.tool'
 version = '1.4.2'
 description = '9Patch Resizer'
