@@ -31,6 +31,12 @@ You're using 9patch resizer for your apps ? Don't hesitate and leave me a messag
 
 ## Roadmap
 
+I'll be honest, I don't really maintain 9-Patch-Resizer anymore, as 9-patch are somewhat a thing of the past, and I use as many vector drawables as possible lately.
+
+I will of course consider bug fixes, but I might not have the bandwidth for feature requests.
+
+Sorry about that.
+
 - [ ] A proper "Settings" panel, to handle issues such as jpeg compression, etc etc...
 - [ ] A few optimisations
 - [x] Command line support
